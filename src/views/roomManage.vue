@@ -1,6 +1,6 @@
 <script setup>
   import { ref, onMounted} from 'vue'
-  import EditRoom from '/src/components/EditRoom.vue'
+  import EditRoom from '../components/EditRoom.vue'
   import axios from 'axios'
 
   const rooms = ref([])
@@ -10,7 +10,7 @@
     size: 2,
     price: 2000,
     amount: 1,
-    cover: "/src/assets/economy-double.jpg",
+    cover: "https://img.freepik.com/free-photo/small-hotel-bedroom-with-white-walls-panoramic-window_1262-12488.jpg?size=626&ext=jpg&ga=GA1.1.125570085.1686126382&semt=sph",
     discount: 0.9,
     editing: false,
     equipment: {

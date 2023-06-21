@@ -7,7 +7,7 @@
       "size": 2,
       "price": 3000,
       "amount": 1,
-      "cover": "/src/assets/economy-double.jpg",
+      "cover": "../assets/economy-double.jpg",
       "discount": 0.87,
       "equipment": {
         "wifi": true,
@@ -22,7 +22,7 @@
       "size": 2,
       "price": 5000,
       "amount": 1,
-      "cover": "/src/assets/business-double.jpg",
+      "cover": "../assets/business-double.jpg",
       "discount": 0.9,
       "equipment": {
         "wifi": true,
@@ -37,7 +37,7 @@
       "size": 2,
       "price": 6000,
       "amount": 1,
-      "cover": "/src/assets/city-view-double.jpg",
+      "cover": "../assets/city-view-double.jpg",
       "discount": 0.92,
       "equipment": {
         "wifi": true,
@@ -52,7 +52,7 @@
       "size": 2,
       "price": 7000,
       "amount": 1,
-      "cover": "/src/assets/sea-view-double.jpeg",
+      "cover": "../assets/sea-view-double.jpeg",
       "discount": 0.85,
       "equipment": {
         "wifi": true,
@@ -67,7 +67,7 @@
       "size": 2,
       "price": 10000,
       "amount": 1,
-      "cover": "/src/assets/deluxe-double.jpeg",
+      "cover": "../assets/deluxe-double.jpeg",
       "discount": 0.9,
       "equipment": {
         "wifi": true,
@@ -82,7 +82,7 @@
       "size": 1,
       "price": 4000,
       "amount": 1,
-      "cover": "/src/assets/sea-view-single.jpg",
+      "cover": "../assets/sea-view-single.jpg",
       "discount": 0.6,
       "equipment": {
         "wifi": true,
@@ -97,7 +97,7 @@
       "size": 4,
       "price": 9000,
       "amount": 1,
-      "cover": "/src/assets/city-view-quadruple.jpg",
+      "cover": "../assets/city-view-quadruple.jpg",
       "discount": 0.9,
       "equipment": {
         "wifi": true,
@@ -111,7 +111,7 @@
       "size": 3,
       "price": 3333,
       "amount": 1,
-      "cover": "/src/assets/bali-triple.jpg",
+      "cover": "../assets/bali-triple.jpg",
       "discount": 0.95,
       "editing": true,
       "equipment": {
@@ -127,7 +127,7 @@
       "size": 4,
       "price": 8888,
       "amount": 1,
-      "cover": "/src/assets/comfort-quadruple.jpg",
+      "cover": "../assets/comfort-quadruple.jpg",
       "discount": 0.8,
       "editing": true,
       "equipment": {
@@ -143,7 +143,7 @@
       "size": 1,
       "price": 1680,
       "amount": 1,
-      "cover": "/src/assets/business-single.jpg",
+      "cover": "../assets/business-single.jpg",
       "discount": 0.88,
       "editing": false,
       "equipment": {
@@ -159,7 +159,7 @@
       "size": 3,
       "price": 2580,
       "amount": 1,
-      "cover": "/src/assets/small-triple.jpeg",
+      "cover": "../assets/small-triple.jpeg",
       "discount": 0.79,
       "editing": false,
       "equipment": {

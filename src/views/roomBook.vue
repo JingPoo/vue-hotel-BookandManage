@@ -1,6 +1,6 @@
 <script setup>
   import { ref, computed, onMounted } from 'vue'
-  import Room from '/src/components/Room.vue'
+  import Room from '../components/Room.vue'
   import axios from 'axios';
 
   const rooms = ref([])

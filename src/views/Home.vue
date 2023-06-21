@@ -1,7 +1,7 @@
 <script setup>
     import { ref, computed, onMounted, watch } from 'vue';
     import axios from 'axios';
-    import SearchRoom from '/src/components/SearchRoom.vue'
+    import SearchRoom from '../components/SearchRoom.vue'
 
     const today = ref(new Date().toISOString().split('T')[0])
     const checkin_date = ref(today)

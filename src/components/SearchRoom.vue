@@ -19,7 +19,7 @@
     })
     const bg_css = computed(()=>{
         return {
-            backgroundImage: "url('" + props.room_data.cover + "')"
+            backgroundImage: `url(${props.room_data.cover})`
         }
     })
 

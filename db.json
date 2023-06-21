@@ -7,7 +7,7 @@
       "size": 2,
       "price": 3000,
       "amount": 1,
-      "cover": "/src/assets/economy-double.jpg",
+      "cover": "https://img.freepik.com/free-photo/small-hotel-bedroom-with-white-walls-panoramic-window_1262-12488.jpg?size=626&ext=jpg&ga=GA1.1.125570085.1686126382&semt=sph",
       "discount": 0.87,
       "equipment": {
         "wifi": true,
@@ -22,7 +22,7 @@
       "size": 2,
       "price": 5000,
       "amount": 1,
-      "cover": "/src/assets/business-double.jpg",
+      "cover": "https://img.freepik.com/free-photo/modern-studio-apartment-design-with-bedroom-living-space_1262-12375.jpg?size=626&ext=jpg&ga=GA1.1.125570085.1686126382&semt=sph",
       "discount": 0.9,
       "equipment": {
         "wifi": true,
@@ -37,7 +37,7 @@
       "size": 2,
       "price": 6000,
       "amount": 1,
-      "cover": "/src/assets/city-view-double.jpg",
+      "cover": "https://img.freepik.com/free-psd/classic-bedroom-hotel-room-with-double-bed_176382-84.jpg?size=626&ext=jpg&ga=GA1.1.125570085.1686126382&semt=ais",
       "discount": 0.92,
       "equipment": {
         "wifi": true,
@@ -52,7 +52,7 @@
       "size": 2,
       "price": 7000,
       "amount": 1,
-      "cover": "/src/assets/sea-view-double.jpeg",
+      "cover": "https://img.freepik.com/free-psd/realistic-elegant-double-bedroom-with-furniture-big-windows_176382-302.jpg?size=626&ext=jpg&ga=GA1.1.125570085.1686126382&semt=ais",
       "discount": 0.85,
       "equipment": {
         "wifi": true,
@@ -67,7 +67,7 @@
       "size": 2,
       "price": 10000,
       "amount": 1,
-      "cover": "/src/assets/deluxe-double.jpeg",
+      "cover": "https://img.freepik.com/free-photo/luxury-bedroom-hotel_1150-10836.jpg?size=626&ext=jpg&ga=GA1.1.125570085.1686126382&semt=ais",
       "discount": 0.9,
       "equipment": {
         "wifi": true,
@@ -82,7 +82,7 @@
       "size": 1,
       "price": 4000,
       "amount": 1,
-      "cover": "/src/assets/sea-view-single.jpg",
+      "cover": "https://img.freepik.com/free-photo/pillow-bed_74190-4497.jpg?size=626&ext=jpg&ga=GA1.1.125570085.1686126382&semt=ais",
       "discount": 0.6,
       "equipment": {
         "wifi": true,
@@ -97,7 +97,7 @@
       "size": 4,
       "price": 9000,
       "amount": 1,
-      "cover": "/src/assets/city-view-quadruple.jpg",
+      "cover": "https://img.freepik.com/free-photo/3d-rendering-luxury-bedroom-suite-resort-hotel-with-twin-bed-living_105762-2018.jpg?size=626&ext=jpg&ga=GA1.1.125570085.1686126382&semt=sph",
       "discount": 0.9,
       "equipment": {
         "wifi": true,
@@ -111,7 +111,7 @@
       "size": 3,
       "price": 3333,
       "amount": 1,
-      "cover": "/src/assets/bali-triple.jpg",
+      "cover": "https://img.freepik.com/free-photo/elegant-hotel-room-with-window_1203-1492.jpg?size=626&ext=jpg&ga=GA1.1.125570085.1686126382&semt=ais",
       "discount": 0.95,
       "editing": true,
       "equipment": {
@@ -127,7 +127,7 @@
       "size": 4,
       "price": 8888,
       "amount": 1,
-      "cover": "/src/assets/comfort-quadruple.jpg",
+      "cover": "https://img.freepik.com/free-photo/3d-rendering-beautiful-comtemporary-luxury-bedroom-suite-hotel-with-tv_105762-2058.jpg?size=626&ext=jpg&ga=GA1.1.125570085.1686126382&semt=ais",
       "discount": 0.8,
       "editing": true,
       "equipment": {
@@ -143,7 +143,7 @@
       "size": 1,
       "price": 1680,
       "amount": 1,
-      "cover": "/src/assets/business-single.jpg",
+      "cover": "https://img.freepik.com/free-photo/white-bedroom-hotel_1150-12633.jpg?size=626&ext=jpg&ga=GA1.1.125570085.1686126382&semt=ais",
       "discount": 0.88,
       "editing": false,
       "equipment": {
@@ -159,7 +159,7 @@
       "size": 3,
       "price": 2580,
       "amount": 1,
-      "cover": "/src/assets/small-triple.jpeg",
+      "cover": "https://img.freepik.com/free-photo/bedroom-comfortable-relax-living-blanket-concept_53876-147837.jpg?size=626&ext=jpg&ga=GA1.1.125570085.1686126382&semt=ais",
       "discount": 0.79,
       "editing": false,
       "equipment": {
