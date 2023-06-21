@@ -8,7 +8,7 @@
       "price": 3000,
       "amount": 1,
       "cover": "/src/assets/economy-double.jpg",
-      "discount": 0.9,
+      "discount": 0.87,
       "equipment": {
         "wifi": true,
         "bathtub": true,
@@ -38,7 +38,7 @@
       "price": 6000,
       "amount": 1,
       "cover": "/src/assets/city-view-double.jpg",
-      "discount": 0.9,
+      "discount": 0.92,
       "equipment": {
         "wifi": true,
         "bathtub": true,
@@ -53,7 +53,7 @@
       "price": 7000,
       "amount": 1,
       "cover": "/src/assets/sea-view-double.jpeg",
-      "discount": 0.9,
+      "discount": 0.85,
       "equipment": {
         "wifi": true,
         "bathtub": true,
@@ -83,7 +83,7 @@
       "price": 4000,
       "amount": 1,
       "cover": "/src/assets/sea-view-single.jpg",
-      "discount": 0.9,
+      "discount": 0.6,
       "equipment": {
         "wifi": true,
         "bathtub": true,
@@ -106,12 +106,12 @@
       }
     },
     {
-      "name": "小巧三人房",
-      "eng": "Small Triple Room",
+      "name": "峇厘三人房",
+      "eng": "Bali Triple Room",
       "size": 3,
       "price": 3333,
       "amount": 1,
-      "cover": "/src/assets/economy-double.jpg",
+      "cover": "/src/assets/bali-triple.jpg",
       "discount": 0.95,
       "editing": true,
       "equipment": {
@@ -122,12 +122,12 @@
       "id": 8
     },
     {
-      "name": "擁擠四人房",
-      "eng": "Crowd Quadruple Room",
+      "name": "舒適四人房",
+      "eng": "Comfort Quadruple Room",
       "size": 4,
       "price": 8888,
       "amount": 1,
-      "cover": "/src/assets/economy-double.jpg",
+      "cover": "/src/assets/comfort-quadruple.jpg",
       "discount": 0.8,
       "editing": true,
       "equipment": {
@@ -136,6 +136,38 @@
         "breakfast": true
       },
       "id": 9
+    },
+    {
+      "name": "商務單人房",
+      "eng": "Business Single Room",
+      "size": 1,
+      "price": 1680,
+      "amount": 1,
+      "cover": "/src/assets/business-single.jpg",
+      "discount": 0.88,
+      "editing": false,
+      "equipment": {
+        "wifi": true,
+        "bathtub": false,
+        "breakfast": true
+      },
+      "id": 10
+    },
+    {
+      "name": "小巧三人房",
+      "eng": "Small Triple Room",
+      "size": 3,
+      "price": 2580,
+      "amount": 1,
+      "cover": "/src/assets/small-triple.jpeg",
+      "discount": 0.79,
+      "editing": false,
+      "equipment": {
+        "wifi": true,
+        "bathtub": false,
+        "breakfast": true
+      },
+      "id": 11
     }
   ]
 }

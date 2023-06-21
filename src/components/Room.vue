@@ -1,6 +1,6 @@
 <script setup>
     import { ref, computed } from 'vue'
-
+    
     const props = defineProps({
         room_data: Object,
         hotel_discount: Number,
