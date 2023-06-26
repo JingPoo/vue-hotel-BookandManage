@@ -4,7 +4,8 @@ import roomBook from '/src/views/roomBook.vue'
 import roomManage from '/src/views/roomManage.vue'
 
 const routes = [
-    {path: '/', name: 'Home', component: Home},
+    {path: '/', redirect: { name: 'Home' }},
+    {path: '/vue-hotel-BookandManage/', name: 'Home', component: Home},
     {path: '/roomManage', name: 'roomManage', component: roomManage},
     {path: '/roomBook', name: 'roomBook', component: roomBook}
 ]
