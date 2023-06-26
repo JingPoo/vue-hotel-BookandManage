@@ -23,7 +23,7 @@
   }
   html,body{
     height: 100vh;
-    width: 100vw;
+    /* width: 100vw; */
   }
   body{
     /* background: linear-gradient(60deg, #e6dec0 , #edecea); */
@@ -60,7 +60,7 @@
     font-weight: bold;
   }
   .view-container{
-    width: 100%;
+    width: 100vw;
     max-width: 1440px;
     min-width: 400px;
     margin: auto;
