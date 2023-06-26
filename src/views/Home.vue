@@ -16,15 +16,18 @@
     const childOptions = ref([0,1,2,3,4])
     const roomOptions = ref([1,2])
     const rooms = ref([])
+    const totalRooms = ref(0)
+    const nowShow = ref(0)
     const searchedRooms = ref([])
     const comfirmRooms = ref([])
     const totalMoney = ref(0)
     const nightCount = ref(0)
-
+    
     onMounted(()=>{
         axios.get('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms')
         .then((res)=>{
             rooms.value = res.data
+            totalRooms.value = res.data.length
         }).catch((err)=>{
             console.log(err)
         })
@@ -100,9 +103,43 @@
         searchedRooms.value = []
         comfirmRooms.value = []
     })
+
+    let timer = setInterval(function(){
+        nextHandler()
+    }, 3000)
+    const resetTimer = (()=>{
+        clearInterval(timer)
+        timer = setInterval(function(){
+            nextHandler()
+        }, 3000)
+    })
+    const previousHandler = (()=>{
+        nowShow.value = (nowShow.value - 1 + totalRooms.value) % totalRooms.value
+        resetTimer()
+    })
+    const nextHandler = (()=>{
+        nowShow.value = (nowShow.value + 1 + totalRooms.value) % totalRooms.value
+        resetTimer()
+    })
+    const dotHandler = ((index)=>{
+        nowShow.value = index-1
+        resetTimer()
+    })
+    
 </script>
 <template>
     <div class="container">
+        <div class="slideshow">
+            <div class="slide" v-for="(room, index) in rooms" :key="index" :class="[{show: nowShow === index},{showLeft: (nowShow - 1 + totalRooms) % totalRooms === index},{showRight: (nowShow + 1 + totalRooms) % totalRooms === index}]">
+                <img :src="room.cover">
+                <div class="text"> {{ room.name }} </div>
+            </div>
+            <a class="previous" @click="previousHandler"><i class="fa-solid fa-chevron-left"></i></a>
+            <a class="next" @click="nextHandler"><i class="fa-solid fa-chevron-right"></i></a>
+            <div class="dots">
+                <span class="dot" v-for="index in totalRooms" :key="index" @click="dotHandler(index)" :class="{now: nowShow===index-1}"></span>
+            </div>
+        </div>
         <div class="quickBook">
             <h1>快速訂房</h1>
             <div class="book_block">
@@ -162,10 +199,141 @@
     }
     .container{
         width: 100%;  
-        padding: 10px 20px;    
+        padding-top: 10px;    
         display: flex;
         flex-direction: column;
         align-items: center;  
+        overflow: hidden;
+    }
+    .slideshow{
+        width: 600px;
+        height: 400px;
+        position: relative;
+    }
+    .slideshow .slide{
+        width: 100%;
+        height: 350px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+    }
+    .slide.show{
+        opacity: 1;
+        box-shadow: 0px 0px 10px grey;
+        animation: center 3s linear;
+    }
+    @keyframes center{
+        0%{
+            transform: translateX(10%);
+            opacity: .7;
+        }
+        10%{
+            transform: translateX(0);
+            opacity: 1;
+        }
+        90%{
+            transform: translateX(0);
+            opacity: 1;
+        }
+        100%{
+            transform: translateX(-10%);
+            opacity: .7;
+        }
+    }
+    .slide.showLeft,
+    .slide.showRight{
+        opacity: .7;
+        position: absolute;
+    }
+    .slide.showLeft{
+        left: -100%;
+        animation: left 3s linear;
+    }
+    @keyframes left{
+        0%{
+            transform: scale(.9);
+        }
+        10%{
+            transform: scale(.8);
+        }
+        100%{
+            transform: scale(.8);
+        }
+    }
+    .slide.showRight{
+        left: 100%;
+        animation: right 3s linear;
+    }
+    @keyframes right{
+        0%{
+            transform: scale(.8);
+        }
+        90%{
+            transform: scale(.8);
+        }
+        100%{
+            transform: scale(.9);
+        }
+    }
+    .slide.showLeft .text,
+    .slide.showRight .text{
+        display: none;
+    }
+    .slide .text{
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        color: white;
+        font-size: 20px;
+    }
+    .slideshow a{
+        font-size: 25px;
+        color: black;
+        position: absolute;
+        top: 45%;
+        cursor: pointer;
+        transition: .3s;
+    }
+    .slideshow a:hover{
+        color: #4e4c4c;
+    }
+    .previous{
+        left: -25px;
+    }
+    .previous:hover{
+        transform: translateX(-5px);
+    }
+    .next{
+        right: -25px;
+    }
+    .next:hover{
+        transform: translateX(5px);
+    }
+    .slideshow .dots{
+        width: 100%;
+        height: 50px;
+        position: absolute;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .dot{
+        cursor: pointer;
+        height: 10px;
+        width: 10px;
+        margin: 0px 4px;
+        border-radius: 50%;
+        background-color: #bbb;
+    }
+    .dot.now,
+    .dot:hover{
+        background-color: #4e4c4c;
+    }
+    .slide img{
+        width: 100%;
+        height: 100%;
     }
     .quickBook{
         width: 100%;
@@ -281,6 +449,17 @@
 
     /* For Mobile Device */
     @media all and (max-width: 414px){
+        .slideshow{
+            width: 300px;
+            height: 200px;
+        }
+        .slideshow .slide{
+            width: 100%;
+            height: 150px;
+        }
+        .slideshow a{
+            top: 35%;
+        }
         .quickBook{
             height: 260px;
         }
@@ -330,6 +509,17 @@
 
     /* For Small Device */
     @media all and (min-width: 414px) and (max-width: 768px){
+        .slideshow{
+            width: 300px;
+            height: 250px;
+        }
+        .slideshow .slide{
+            width: 100%;
+            height: 200px;
+        }
+        .slideshow a{
+            top: 35%;
+        }
         .quickBook{
             height: 180px;
         }
