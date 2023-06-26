@@ -22,7 +22,7 @@
     const nightCount = ref(0)
 
     onMounted(()=>{
-        axios.get('http://localhost:8888/rooms')
+        axios.get('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms')
         .then((res)=>{
             rooms.value = res.data
         }).catch((err)=>{

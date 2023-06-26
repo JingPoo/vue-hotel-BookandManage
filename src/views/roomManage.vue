@@ -35,7 +35,7 @@
   const id = ref(rooms.value.length)
 
   onMounted(()=>{
-    axios.get('http://localhost:8888/rooms')
+    axios.get('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms')
       .then((res)=>{
         rooms.value = res.data
       }).catch((err)=>{
@@ -43,7 +43,7 @@
       })
   })
   const add_room = (()=>{
-    axios.post('http://localhost:8888/rooms', newRoom.value)
+    axios.post('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms', newRoom.value)
       .then((res)=>{
         rooms.value.push(res.data)
         edit_id.value = rooms.value.length - 1
@@ -54,7 +54,7 @@
   const delete_room = ((index)=>{
     let target = rooms.value[index]
     if(confirm(`是否刪除 ${target.name}?`)){
-      axios.delete('http://localhost:8888/rooms/' + target.id)
+      axios.delete('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + target.id)
         .then((res)=>{
           rooms.value.splice(index, 1)
         }).catch((err)=>{
@@ -76,7 +76,7 @@
     let id = rooms.value[index].id
     if(!inputName.value) return 
     else{
-      axios.patch('http://localhost:8888/rooms/' + id, {name: inputName.value})
+      axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {name: inputName.value})
       .then((res)=>{
         rooms.value[index].name = res.data.name
         inputName.value = {name: ''}
@@ -90,7 +90,7 @@
     let id = rooms.value[index].id
     if(!inputEng.value) return 
     else{
-      axios.patch('http://localhost:8888/rooms/' + id, {eng: inputEng.value})
+      axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {eng: inputEng.value})
         .then((res)=>{
           rooms.value[index].eng = res.data.eng
           inputEng.value = {eng: ''}
@@ -104,7 +104,7 @@
     let id = rooms.value[index].id
     if(!inputSize.value || inputSize.value < 0 || inputSize.value > 4) return 
     else{
-      axios.patch('http://localhost:8888/rooms/' + id, {size: inputSize.value})
+      axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {size: inputSize.value})
         .then((res)=>{
           rooms.value[index].size = res.data.size
           inputSize.value = {size: ''}
@@ -118,7 +118,7 @@
     let id = rooms.value[index].id
     if(!inputPrice.value || inputPrice.value < 0) return 
     else{
-      axios.patch('http://localhost:8888/rooms/' + id, {price: inputPrice.value})
+      axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {price: inputPrice.value})
         .then((res)=>{
           rooms.value[index].price = res.data.price
           inputPrice.value = {price: ''}
@@ -132,7 +132,7 @@
     let id = rooms.value[index].id
     if(!inputDiscount.value || inputDiscount.value < 0 || inputDiscount.value > 1) return 
     else{
-      axios.patch('http://localhost:8888/rooms/' + id, {discount: inputDiscount.value})
+      axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {discount: inputDiscount.value})
         .then((res)=>{
           rooms.value[index].discount = res.data.discount
           inputDiscount.value = {discount: ''}
@@ -146,7 +146,7 @@
     let id = rooms.value[index].id
     if(!inputCover.value) return 
     else{
-      axios.patch('http://localhost:8888/rooms/' + id, {cover: inputCover.value})
+      axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {cover: inputCover.value})
         .then((res)=>{
           rooms.value[index].cover = res.data.cover
           inputCover.value = {cover: ''}
@@ -159,7 +159,7 @@
   const wifiCheckHandler = ((index)=>{
     wifiChecked.value = rooms.value[index].equipment.wifi
     let id = rooms.value[index].id
-    axios.patch('http://localhost:8888/rooms/' + id, {
+    axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {
       equipment:{
         wifi: wifiChecked.value,
         bathtub: rooms.value[index].equipment.bathtub,
@@ -170,7 +170,7 @@
   const bathtubCheckHandler = ((index)=>{
     bathtubChecked.value = rooms.value[index].equipment.bathtub
     let id = rooms.value[index].id
-    axios.patch('http://localhost:8888/rooms/' + id, {
+    axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {
       equipment:{
         wifi: rooms.value[index].equipment.wifi,
         bathtub: bathtubChecked.value,
@@ -181,7 +181,7 @@
   const breakfastCheckHandler = ((index)=>{
     breakfastChecked.value = rooms.value[index].equipment.breakfast
     let id = rooms.value[index].id
-    axios.patch('http://localhost:8888/rooms/' + id, {
+    axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {
       equipment:{
         wifi: rooms.value[index].equipment.wifi,
         bathtub: rooms.value[index].equipment.bathtub,
