@@ -180,9 +180,9 @@
             <SearchRoom 
                 v-for="(room, index) in searchedRooms" 
                 :key="room.id"
-                :room_data="room" 
-                :hotel_discount="discount"
-                :hotel_fee="service_fee"
+                :roomData="room" 
+                :hotelDiscount="discount"
+                :hotelFee="service_fee"
                 :index="index"
                 @click="roomClickHandler(room)"
                 >

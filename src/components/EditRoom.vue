@@ -2,14 +2,14 @@
     import { ref, computed } from 'vue'
 
     const props = defineProps({
-        room_data: Object,
-        hotel_discount: Number,
-        hotel_fee: Number,
+        roomData: Object,
+        hotelDiscount: Number,
+        hotelFee: Number,
         index: Number
     })
 
     const final_discount = computed(()=>{
-        return props.room_data.discount * props.hotel_discount
+        return props.roomData.discount * props.hotelDiscount
     })
     const final_discount_show = computed(()=>{
         let number = final_discount.value * 100
@@ -22,11 +22,11 @@
         return parseInt(final_discount.value * 100)
     })
     const final_price = computed(()=>{
-        return parseInt(props.room_data.price * final_discount.value + props.hotel_fee * 1.0)
+        return parseInt(props.roomData.price * final_discount.value + props.hotelFee * 1.0)
     })
     const bg_css = computed(()=>{
         return {
-            backgroundImage: `url(${props.room_data.cover})`
+            backgroundImage: `url(${props.roomData.cover})`
         }
     })
 </script>
@@ -34,20 +34,20 @@
 <template>
     <div class="room_container" @click="$emit('editRoom', index)">
         <div class="cover" :style="bg_css">
-            <h3> {{ room_data.name }} </h3>
+            <h3> {{ roomData.name }} </h3>
             <i class="fa-regular fa-circle-xmark" @click="$emit('deleteRoom', index)"></i>
         </div>
         <div class="info">
             <div class="nameIcon">
-                <h5> {{ room_data.eng }} </h5>
+                <h5> {{ roomData.eng }} </h5>
                 <div class="icons">
-                    <i v-show="room_data.equipment.wifi" class="fa-solid fa-wifi"></i>
-                    <i v-show="room_data.equipment.bathtub" class="fa-solid fa-bath"></i>
-                    <i v-show="room_data.equipment.breakfast" class="fa-solid fa-mug-saucer"></i>
+                    <i v-show="roomData.equipment.wifi" class="fa-solid fa-wifi"></i>
+                    <i v-show="roomData.equipment.bathtub" class="fa-solid fa-bath"></i>
+                    <i v-show="roomData.equipment.breakfast" class="fa-solid fa-mug-saucer"></i>
                 </div>
             </div>
-            <h5> {{ room_data.discount }} * {{ hotel_discount }} = {{  final_discount_show }}折</h5>
-            <h4> TWD <span>{{ room_data.price }}</span></h4>
+            <h5> {{ roomData.discount }} * {{ hotelDiscount }} = {{  final_discount_show }}折</h5>
+            <h4> TWD <span>{{ roomData.price }}</span></h4>
             <div class="final_price" > 
                 {{ final_price }}
             </div>
