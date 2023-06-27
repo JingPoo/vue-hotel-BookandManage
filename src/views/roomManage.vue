@@ -255,7 +255,8 @@
             :hotel_discount="discount"
             :hotel_fee="service_fee"
             :index="index"
-            @deleteRoom="delete_room">
+            @deleteRoom="delete_room"
+            @editRoom="editClickHandler">
           </EditRoom>
         </div>
       </div>

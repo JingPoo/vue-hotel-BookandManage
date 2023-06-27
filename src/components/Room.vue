@@ -68,7 +68,6 @@
         display: flex;
         flex-direction: column;
         box-shadow: 0px 0px 10px grey;
-        cursor: pointer;
     }
     .room_container:hover{
         opacity: .9;

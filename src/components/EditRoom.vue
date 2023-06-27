@@ -32,7 +32,7 @@
 </script>
 
 <template>
-    <div class="room_container">
+    <div class="room_container" @click="$emit('editRoom', index)">
         <div class="cover" :style="bg_css">
             <h3> {{ room_data.name }} </h3>
             <i class="fa-regular fa-circle-xmark" @click="$emit('deleteRoom', index)"></i>
