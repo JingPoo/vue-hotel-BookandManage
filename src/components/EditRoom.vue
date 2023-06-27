@@ -16,7 +16,8 @@
         },
         index: Number
     })
-
+    const emit = defineEmits(['editRoom', 'deleteRoom'])
+    
     const final_discount = computed(()=>{
         return props.roomData.discount * props.hotelDiscount
     })
@@ -38,13 +39,20 @@
             backgroundImage: `url(${props.roomData.cover})`
         }
     })
+   
+    const editHandler = ()=>{
+        emit('editRoom', props.index)
+    }
+    const deleteHandler = ()=>{
+        emit('deleteRoom', props.index)
+    }
 </script>
 
 <template>
-    <div class="room_container" @click="$emit('editRoom', index)">
+    <div class="room_container" @click="editHandler">
         <div class="cover" :style="bg_css">
             <h3> {{ roomData.name }} </h3>
-            <i class="fa-regular fa-circle-xmark" @click="$emit('deleteRoom', index)"></i>
+            <i class="fa-regular fa-circle-xmark" @click="deleteHandler"></i>
         </div>
         <div class="info">
             <div class="nameIcon">
