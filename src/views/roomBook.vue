@@ -99,12 +99,11 @@
       </div>
       <div class="room_block">
         <Room 
-          v-for="(room, index) in sortedFilteredRooms" 
+          v-for="room in sortedFilteredRooms" 
           :key="room.id"
           :roomData="room" 
           :hotelDiscount="discount"
-          :hotelFee="service_fee"
-          :index="index">
+          :hotelFee="service_fee">
         </Room>
       </div>
     </div>

@@ -2,9 +2,18 @@
     import { ref, computed } from 'vue'
 
     const props = defineProps({
-        roomData: Object,
-        hotelDiscount: Number,
-        hotelFee: Number,
+        roomData: {
+            type: Object,
+            required: true
+        },
+        hotelDiscount: {
+            type: Number,
+            default: 0.9
+        },
+        hotelFee: {
+            type: Number,
+            default: 200
+        },
         index: Number
     })
 

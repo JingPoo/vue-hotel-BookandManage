@@ -178,12 +178,11 @@
         </div>
         <div class="result">
             <SearchRoom 
-                v-for="(room, index) in searchedRooms" 
+                v-for="room in searchedRooms" 
                 :key="room.id"
                 :roomData="room" 
                 :hotelDiscount="discount"
                 :hotelFee="service_fee"
-                :index="index"
                 @click="roomClickHandler(room)"
                 >
             </SearchRoom>

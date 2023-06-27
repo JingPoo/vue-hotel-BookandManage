@@ -13,10 +13,18 @@
     // const room11 = new URL("../assets/small-triple.jpeg", import.meta.url).href;
 
     const props = defineProps({
-        roomData: Object,
-        hotelDiscount: Number,
-        hotelFee: Number,
-        index: Number
+        roomData: {
+            type: Object,
+            required: true
+        },
+        hotelDiscount: {
+            type: Number,
+            default: 0.9
+        },
+        hotelFee: {
+            type: Number,
+            default: 200
+        }
     })
 
     const final_discount = computed(()=>{
