@@ -5,8 +5,8 @@
   <nav>
     <div class="nav-container">
       <router-link to="/">首頁</router-link>
-      <router-link to="/roomBook">房間瀏覽</router-link>
-      <router-link to="/roomManage">房間管理</router-link>
+      <router-link to="/vue-hotel-BookandManage/roomBook">房間瀏覽</router-link>
+      <router-link to="/vue-hotel-BookandManage/roomManage">房間管理</router-link>
     </div>
   </nav>
   <div class="view-container">

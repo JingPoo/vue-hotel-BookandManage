@@ -6,8 +6,9 @@ import roomManage from '/src/views/roomManage.vue'
 const routes = [
     {path: '/', redirect: { name: 'Home' }},
     {path: '/vue-hotel-BookandManage/', name: 'Home', component: Home},
-    {path: '/roomManage', name: 'roomManage', component: roomManage},
-    {path: '/roomBook', name: 'roomBook', component: roomBook}
+    {path: '/vue-hotel-BookandManage/roomManage', name: 'roomManage', component: roomManage},
+    {path: '/vue-hotel-BookandManage/roomBook', name: 'roomBook', component: roomBook},
+    {path: '/vue-hotel-BookandManage/:pathMatch(.*)*', redirect: { name: 'Home' }}
 ]
 
 const router = createRouter({
