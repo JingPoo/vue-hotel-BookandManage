@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onMounted} from 'vue'
+  import { ref, onMounted, onUpdated} from 'vue'
   import EditRoom from '../components/EditRoom.vue'
   import axios from 'axios'
 
@@ -62,6 +62,14 @@
       })
     }
   })
+  // // 讓視窗捲動到編輯處
+  // onUpdated(()=>{
+  //   const el = document.querySelector('.editing')
+  //   if(el){
+  //     let top = el.getBoundingClientRect().top
+  //     window.scrollTo(0, top)
+  //   }
+  // })
   const editClickHandler = ((index)=>{
     if(edit_id.value == index){
       edit_id.value = -1
@@ -202,9 +210,6 @@
           <label for="service_fee">服務費</label>
           <input type="number" id="service_fee" min="0" v-model.trim="service_fee">
           <h1>房間編輯</h1> 
-          <!-- <select v-model="edit_id">
-            <option v-for="(room, index) in rooms" :key="room.id" :value="index"> {{ room.name }} </option>
-          </select> -->
           <div class="add_room">
             <button class="add_room_btn" @click="add_room">+新增房間</button>
           </div>
@@ -213,7 +218,7 @@
               <h4> {{ room.name }} </h4>
               <i class="fa-solid fa-trash-can" @click="delete_room(index)"></i>
             </div>
-            <div class="edit_part" v-if="edit_id == index">
+            <div class="edit_part" v-show="edit_id == index">
               <label for="room_name">房間名稱</label>
               <input type="string" id="room_name" v-model.trim="room.name" @input="nameEditHandler(index)">
               <label for="room_eng">英文名稱</label>

@@ -59,7 +59,7 @@
                     <i v-show="roomData.equipment.breakfast" class="fa-solid fa-mug-saucer"></i>
                 </div>
             </div>
-            <h4> TWD <span>{{ roomData.price }}</span> <span></span></h4>
+            <h4> TWD <span>{{ roomData.price }}</span></h4>
             <div class="final_price"> 
                 {{ final_price }}
             </div>
@@ -76,6 +76,7 @@
         display: flex;
         flex-direction: column;
         box-shadow: 0px 0px 10px grey;
+        cursor: pointer;
     }
     .room_container:hover{
         opacity: .9;

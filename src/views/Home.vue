@@ -137,7 +137,7 @@
             <a class="previous" @click="previousHandler"><i class="fa-solid fa-chevron-left"></i></a>
             <a class="next" @click="nextHandler"><i class="fa-solid fa-chevron-right"></i></a>
             <div class="dots">
-                <span class="dot" v-for="index in totalRooms" :key="index" @click="dotHandler(index)" :class="{now: nowShow===index-1}"></span>
+                <span class="dot" v-for="index in totalRooms" :key="index" @click="dotHandler(index)" :class="{now: nowShow === index-1}"></span>
             </div>
         </div>
         <div class="quickBook">

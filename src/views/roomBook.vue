@@ -1,6 +1,7 @@
 <script setup>
   import { ref, computed, onMounted } from 'vue'
   import Room from '../components/Room.vue'
+  import RoomModal from '../components/RoomModal.vue'
   import axios from 'axios';
 
   const rooms = ref([])
@@ -18,6 +19,7 @@
     {text: '由高至低', value: 'descend'},
     {text: '最多折扣', value: 'mostDiscount'}
   ])
+  const showModal = ref(-1)
 
   onMounted(()=>{
     axios.get('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms')
@@ -80,6 +82,9 @@
     doubleFiltered.value = false
   })
 
+  const roomClickHandler = ((index)=>{
+    showModal.value = index
+  })
 </script>
 
 <template>
@@ -99,12 +104,24 @@
       </div>
       <div class="room_block">
         <Room 
-          v-for="room in sortedFilteredRooms" 
+          v-for="(room, index) in sortedFilteredRooms" 
           :key="room.id"
           :roomData="room" 
           :hotelDiscount="discount"
-          :hotelFee="service_fee">
+          :hotelFee="service_fee"
+          @click="roomClickHandler(index)">
         </Room>
+        <Teleport to="body">
+          <RoomModal 
+            v-for="(room, index) in sortedFilteredRooms" 
+            :key="room.id"
+            v-show="showModal == index"
+            :room="room"
+            :hotelDiscount="discount"
+            :hotelFee="service_fee"
+            @close="showModal = -1">
+          </RoomModal>
+        </Teleport>
       </div>
     </div>
   </div>
