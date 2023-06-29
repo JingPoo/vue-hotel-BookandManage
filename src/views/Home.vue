@@ -2,6 +2,7 @@
     import { ref, computed, onMounted, watch } from 'vue';
     import axios from 'axios';
     import SearchRoom from '../components/SearchRoom.vue'
+    import RoomModal from '../components/RoomModal.vue'
 
     const today = ref(new Date().toISOString().split('T')[0])
     const checkin_date = ref(today)
@@ -22,7 +23,8 @@
     const comfirmRooms = ref([])
     const totalMoney = ref(0)
     const nightCount = ref(0)
-    
+    const showModal = ref(-1)
+
     onMounted(()=>{
         axios.get('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms')
         .then((res)=>{
@@ -125,12 +127,19 @@
         nowShow.value = index-1
         resetTimer()
     })
-    
+    const slideClickHandler = ((index)=>{
+        showModal.value = index
+    })
+    const closeModalHandler = (()=>{
+        showModal.value = -1
+    })
 </script>
 <template>
     <div class="container">
         <div class="slideshow">
-            <div class="slide" v-for="(room, index) in rooms" :key="index" :class="[{show: nowShow === index},{showLeft: (nowShow - 1 + totalRooms) % totalRooms === index},{showRight: (nowShow + 1 + totalRooms) % totalRooms === index}]">
+            <div class="slide" 
+            v-for="(room, index) in rooms" :key="index" :class="[{show: nowShow === index},{showLeft: (nowShow - 1 + totalRooms) % totalRooms === index},{showRight: (nowShow + 1 + totalRooms) % totalRooms === index}]"
+            @click="slideClickHandler(index)">
                 <img :src="room.cover">
                 <div class="text"> {{ room.name }} </div>
             </div>
@@ -139,6 +148,17 @@
             <div class="dots">
                 <span class="dot" v-for="index in totalRooms" :key="index" @click="dotHandler(index)" :class="{now: nowShow === index-1}"></span>
             </div>
+            <Teleport to="body">
+                <RoomModal 
+                    v-for="(room, index) in rooms" 
+                    :key="room.id"
+                    v-show="showModal == index"
+                    :room="room"
+                    :hotelDiscount="discount"
+                    :hotelFee="service_fee"
+                    @close="closeModalHandler">
+                </RoomModal>
+            </Teleport>
         </div>
         <div class="quickBook">
             <h1>快速訂房</h1>
@@ -216,9 +236,11 @@
         top: 0;
         left: 0;
         opacity: 0;
+        cursor: pointer;
     }
     .slide.show{
         opacity: 1;
+        z-index: 99;
         box-shadow: 0px 0px 10px grey;
         animation: center 3s linear;
     }

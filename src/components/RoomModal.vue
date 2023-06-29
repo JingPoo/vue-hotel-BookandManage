@@ -69,7 +69,7 @@ const final_price = computed(()=>{
   height: 500px;
   margin: auto;
   padding: 10px 20px;
-  background-color: #edecea;
+  background-color: #edeceaf1;
   border-radius: 10px;
   box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
   transition: all 0.3s ease;
