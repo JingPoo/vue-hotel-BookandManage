@@ -48,7 +48,8 @@
         return min
     })
     const nightStay = computed(()=>{
-        return new Date(checkout_date.value).getDate() - new Date(checkin_date.value).getDate()
+        let difference = new Date(checkout_date.value) - new Date(checkin_date.value)
+        return difference / (1000 * 3600 * 24)
     })
     // 看人數決定客房數選項
     watch([adult, children], ([newAdult, newChildern])=>{
