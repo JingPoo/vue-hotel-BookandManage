@@ -1,3 +1,3 @@
 # vue-hotel-BookandManage
 
-A hotel website with room searching, filtering and managing.
+A practice hotel website with room searching, filtering and in-time managing.
