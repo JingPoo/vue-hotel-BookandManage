@@ -92,14 +92,19 @@
     <div class="roomList">
       <div class="title">
         <h1>房間列表 <span>({{ filteredRooms.length }}間)</span></h1>
-        <div class="filter">
-          <div class="single-filter" :class="{filtering: singleFiltered}" @click="singleFilter"><i class="fa-solid fa-tag"></i>單人房</div>
-          <div class="double-filter" :class="{filtering: doubleFiltered}" @click="doubleFilter"><i class="fa-solid fa-tag"></i>雙人房</div>
-          <div class="triple-filter" :class="{filtering: tripleFiltered}" @click="tripleFilter"><i class="fa-solid fa-tag"></i>三人房</div>
-          <div class="quadruple-filter" :class="{filtering: quadrupleFiltered}" @click="quadrupleFilter"><i class="fa-solid fa-tag"></i>四人房</div>
-          <select name="price-sort" id="price-sort" v-model="sortBy">
-            <option v-for="(option, index) in sortOptions" :key="index" :value="option.value">{{ option.text }}</option>
-          </select>
+        <div class="button">
+          <div class="filter">
+            <div class="single-filter" :class="{filtering: singleFiltered}" @click="singleFilter"><i class="fa-solid fa-tag"></i>單人房</div>
+            <div class="double-filter" :class="{filtering: doubleFiltered}" @click="doubleFilter"><i class="fa-solid fa-tag"></i>雙人房</div>
+            <div class="triple-filter" :class="{filtering: tripleFiltered}" @click="tripleFilter"><i class="fa-solid fa-tag"></i>三人房</div>
+            <div class="quadruple-filter" :class="{filtering: quadrupleFiltered}" @click="quadrupleFilter"><i class="fa-solid fa-tag"></i>四人房</div>
+          </div>
+          <div class="order">
+            <h3>排序方式:</h3>
+            <select name="price-sort" id="price-sort" v-model="sortBy">
+              <option v-for="(option, index) in sortOptions" :key="index" :value="option.value">{{ option.text }}</option>
+            </select>
+          </div>
         </div>
       </div>
       <div class="room_block">
@@ -127,145 +132,135 @@
   </div>
 </template>
 
-<style scoped>
-  .container{
-    width: 100%;
-    padding: 10px 20px;
-  }
+<style scoped lang="scss">
+@import "../assets/style.scss";
+.container{
+  width: 100%;
+  padding: 1rem 2rem;
+
   .roomList{
     width: 100%;
     display: flex;
     flex-direction: column;
-  }
-  .title{
-    width: 100%;
-    display: flex;
-    align-items: center;
-  }
-  .title h1{
-    height: 50px;
-    border-bottom: 1px solid rgb(215, 208, 208);
-  }
-  .title h1 span{
-    font-size: 20px;
-  }
-  .title .filter{
-    flex-grow: 1;
-    margin-left: 20px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    position: relative;
-  }
-  .filter > div{
-    height: 30px;
-    margin: 0px 10px;
-    padding: 2px 10px;
-    border: 1px solid grey;
-    border-radius: 5px;
-    outline: none;
-    cursor: pointer;
-  }
-  .filter div:hover,
-  .filtering{
-    color: white;
-    background-color: #4e482f;
-  }
-  .filter div:hover{
-    opacity: .7;
-  }
-  .filter i{
-    margin-right: 5px;
-  }
-  .filter select{
-    font-size: 16px;
-    border-radius: 5px;
-    padding: 2px 5px;
-    outline: none;
-    position: absolute;
-    right: 0;
-  }
-  .room_block{
-    width: 100%;
-    flex-grow: 1;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: 250px;
-    grid-gap: 20px;
-    padding-top: 20px;
-    box-sizing: border-box;
-  }
-  
-  /* For Mobile Device */
-  @media all and (max-width: 414px){
-    .title{
-      display: flex;
-      flex-direction: column;
-    }
-    .title h1{
-      width: 100%;
-      height: 40px;
-      margin-bottom: 10px;
-      font-size: 26px;
-    }
-    .title .filter{
-      width: 100%;
-      margin-left: 0;
-    }
-    .filter > div{
-      height: 24px;
-      font-size: 12px;
-      margin: 0px 2px;
-      padding: 2px 5px;
-    }
-    .filter select{
-      font-size: 12px;
-      padding: 2px 2px;
-    }
-    .room_block{
-      display: flex;
-      flex-direction: column;
-    }
-  }
 
-  /* For Small Device */
-  @media all and (min-width: 414px) and (max-width: 768px){
     .title{
+      width: 100%;
       display: flex;
       flex-direction: column;
-    }
-    .title h1{
-      width: 100%;
-      height: 40px;
-      margin-bottom: 10px;
-      font-size: 26px;
-    }
-    .title .filter{
-      width: 100%;
-      margin-left: 0;
-    }
-    .filter > div{
-      height: 24px;
-      font-size: 12px;
-      margin: 0px 4px;
-      padding: 2px 5px;
-    }
-    .filter select{
-      font-size: 12px;
-      padding: 2px 2px;
+      align-items: center;
+
+      h1 {
+        width: 100%;
+        font-size: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        @include sm {
+          justify-content: flex-start;
+        }
+        span {
+          font-size: 1rem;
+          padding-left: 4px;
+        }
+      }
+      .button{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+        padding-top: 4px;
+        position: relative;
+
+        @include sm {
+          flex-direction: row;
+          justify-content: space-between;
+        }
+        .filter {
+          height: 2rem;
+          width: max-content;
+          display: flex;
+          justify-content: center;
+          gap: 8px;
+
+          div{
+            height: 100%;
+            width: max-content;
+            font-size: 1rem;
+            padding: 2px 10px;
+            border: 1px solid grey;
+            border-radius: 5px;
+            outline: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            @include md {
+              font-size: 1.2rem;
+            }
+            &:hover,
+            .filtering {
+              color: white;
+              background-color: #4e482f;
+            }
+            &:hover {
+              opacity: .7;
+            }
+            i{
+              margin-right: 5px;
+            }
+          }
+        }
+        .order{
+          display: flex;
+          align-items: center;
+          gap: 4px;
+
+          select{
+            height: 2rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            padding: 2px 5px;
+            outline: none;
+            background-color: transparent;
+            border: 1px solid black;
+
+            @include sm {
+              position: static;
+            }
+            @include md {
+              font-size: 1.2rem;
+            }
+          }
+        }
+      }
     }
     .room_block{
-      grid-template-columns: repeat(2, 1fr);
-      grid-auto-rows: 200px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(1fr);
+      grid-auto-rows: 250px;
+      grid-gap: 20px;
+      padding-top: 20px;
+      box-sizing: border-box;
+
+      @include sm {
+        grid-template-columns: 1fr 1fr;
+        grid-auto-rows: 250px;
+        grid-gap: 30px;
+      }
+      @include lg {
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: 250px;
+      }
+      @include xl {
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: 250px;
+      }
     }
   }
-  /* For Medium Device */  
-  @media all and (min-width: 768px) and (max-width: 992px){
-    .filter > div{
-      margin: 0px 5px;
-    }
-    .room_block{
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
+}
 </style>

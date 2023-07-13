@@ -52,7 +52,8 @@ const final_price = computed(()=>{
   </Transition>
 </template>
 
-<style>
+<style lang="scss">
+@import "../assets/style.scss";
 .modal-mask{
   position: fixed;
   z-index: 100;
@@ -63,71 +64,101 @@ const final_price = computed(()=>{
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   transition: opacity 0.3s ease;
+
+  .modal-container{
+    width: 90%;
+    height: 26rem;
+    margin: auto;
+    padding: 10px 20px;
+    background-color: #edeceaf6;
+    border-radius: 10px;
+    box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    @include sm {
+      height: 32rem;
+    }
+    @include md {
+      width: 48rem;
+      height: 32rem;
+    }
+    @include lg {
+      width: 58rem;
+      height: 36rem;
+    }
+    .modal-header{
+      width: 100%;
+      height: 20%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .close{
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        font-size: 30px;
+        border: none;
+        color: rgb(62, 60, 60);
+        background-color: rgba(255,255,255,0);
+        cursor: pointer;
+
+        &:hover {
+          color: rgb(193, 108, 108);
+        }
+      }
+      .icons{
+        margin-left: 20px;
+        display: flex;
+        gap: 5px;
+      }
+    }
+    .modal-body{
+      width: 100%;
+      height: 60%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img{
+        width: 90%;
+        height: 14rem;
+
+        @include sm {
+          height: 18rem;
+        }
+        @include md {
+          width: 36rem;
+          height: 20rem;
+        }
+        @include lg {
+          width: 42rem;
+          height: 23rem;
+        }
+      }
+    }
+    .modal-footer{
+      width: 100%;
+      height: 20%;
+      font-size: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      span{
+        text-decoration: line-through;
+      }
+      h3{
+        color: rgb(225, 83, 83);
+      }
+    }
+  }
 }
-.modal-container{
-  width: 800px;
-  height: 500px;
-  margin: auto;
-  padding: 10px 20px;
-  background-color: #edeceaf1;
-  border-radius: 10px;
-  box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-.modal-header{
-  width: 100%;
-  height: 20%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.modal-header .close{
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  font-size: 30px;
-  border: none;
-  color: rgb(62, 60, 60);
-  background-color: rgba(255,255,255,0);
-  cursor: pointer;
-}
-.modal-header .close:hover{
-  color: rgb(193, 108, 108);
-}
-.modal-header .icons{
-  margin-left: 20px;
-  display: flex;
-  gap: 5px;
-}
-.modal-body{
-  width: 100%;
-  height: 60%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.modal-body img{
-  width: 550px;
-  height: 100%;
-}
-.modal-footer{
-  width: 100%;
-  height: 20%;
-  font-size: 22px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.modal-footer span{
-  text-decoration: line-through;
-}
-.modal-footer h3{
-  color: rgb(225, 83, 83);
-}
+
 .modal-enter-from {
   opacity: 0;
 }
@@ -137,57 +168,5 @@ const final_price = computed(()=>{
 .modal-enter-from .modal-container,
 .modal-leave-to .modal-container {
   transform: scale(1.1);
-}
-
-/* For Mobile Device */
-@media all and (max-width: 414px){
-  .modal-container{
-    width: 350px;
-    height: 350px;
-  }
-  .modal-header{
-    font-size: 14px;
-  }
-  .modal-header .close{
-    top: 20px;
-    right: 20px;
-    font-size: 20px;
-  }
-  .modal-body img{
-    width: 300px;
-    height: 100%;
-  }
-  .modal-footer{
-    font-size: 18px;
-  }
-}
-
-/* For Small Device */
-@media all and (min-width: 414px) and (max-width: 768px){
-  .modal-container{
-    width: 400px;
-    height: 350px;
-  }
-  .modal-header{
-    font-size: 14px;
-  }
-  .modal-header .close{
-    top: 20px;
-    right: 20px;
-    font-size: 20px;
-  }
-  .modal-body img{
-    width: 300px;
-    height: 100%;
-  }
-  .modal-footer{
-    font-size: 18px;
-  }
-}
-/* For Medium Device */  
-@media all and (min-width: 768px) and (max-width: 992px){
-  .modal-container{
-    width: 600px;
-  }
 }
 </style>

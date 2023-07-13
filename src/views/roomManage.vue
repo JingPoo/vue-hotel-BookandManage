@@ -269,193 +269,186 @@
   </div>
 </template>
 
-<style scoped>
-  .container{
-    width: 100%;
-    /* height: auto; */
-  }
+<style scoped lang="scss">
+ @import "../assets/style.scss";
+.container{
+  width: 100%;
+
   .wrapper{
     width: 100%;
-    padding: 10px;
+    padding: 10px 20px;
     display: flex;
-  }
-  .roomData{
-    width: 250px;
-    min-width: 190px;
-    margin-right: 20px;
-    overflow-y: scroll;
-    padding: 0px 20px;
-    background-color: #ebe9e1;
-    border-radius: 10px;
-  }
-  input,
-  fieldset{
-    min-width: 80px;
-  }
-  .roomData h1{
-    height: 50px;
-    border-bottom: 1px solid rgb(215, 208, 208);
-  }
-  .data_block{
-    flex-grow: 1;
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-  }
-  .data_block > input{
-    height: 30px;
-    border-radius: 5px;
-    border: none;
-    outline: none;
-    margin: 10px 0px;
-    padding: 0 10px;
-  }
-  /* .data_block select{
-    font-size: 16px;
-    outline: none;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin: 5px 0px ;
-  } */
-  .add_room{
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-  }
-  .add_room_btn{
-    color: white;
-    background-color: #635e5e;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    font-size: 16px;
-    margin: 10px 0px;
-    cursor: pointer;
-  }
-  .add_room_btn:hover{
-    opacity: .8;
-  }
-  .room_edit{
-    display: flex;
-    flex-direction: column;
-  }
-  .room_edit .title{
-    width: 100%;
-    min-width: 100px;
-    height: 40px;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    border: 1px solid #aaa;
-    border-left: 4px solid #adaaaa;
-    border-radius: 0px 5px 5px 0px;
-    margin: 10px 0px;
-    padding: 0px 10px;
-    position: relative;
-  }
-  .room_edit .title:hover,
-  .editing{
-    color: white;
-    background-color: #6c6c6a;
-  }
-  .room_edit .title i{
-    cursor: pointer;
-    position: absolute;
-    right: 10px;
-  }
-  .room_edit .title i:hover{
-    color: rgb(193, 108, 108);
-  }
-  .edit_part{
-    display: flex;
-    flex-direction: column;
-  }
-  .edit_part > input{
-    height: 25px;
-    border-radius: 5px;
-    border: none;
-    outline: none;
-    margin: 5px 0px;
-    padding: 0 10px;
-  }
-  .edit_part .equipment{
-    width: 100%;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid grey;
-    border-radius: 2px;
-    font-size: 14px;
-    margin-top: 5px;
-    padding-right: 30px;
-  }
-  .equipment .checkbox_box{
-    width: 33%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .equipment input{
-    width: 30%;
-  }
-  .equipment label{
-    width: 70%;
-    margin-left: -25px;
-  }
-  .roomList{
-    width: calc(100% - 250px);
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  .roomList h1{
-    height: 50px;
-    border-bottom: 1px solid rgb(215, 208, 208);
-  }
-  .roomList h1 span{
-    font-size: 20px;
-  }
-  .room_block{
-    flex-grow: 1;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 250px;
-    grid-gap: 20px;
-    padding-top: 20px;
-  }
-  
-  /* For Mobile Device */
-  @media all and (max-width: 414px){
+
+    @include sm {
+      padding-top: 20px
+    }
+
     .roomData{
-      width: 80%;
-      margin: auto;
+      width: 100%;
+      min-width: max-content;
+      margin-right: 20px;
+      padding: 1rem 2rem;
+      background-color: #ebe9e1;
+      border-radius: 5px;
+      box-shadow: 0px 0px 5px darken($primary, 50);
+    
+      @include sm {
+        width: 25rem;
+        padding-top: 0;
+      }
+      input,
+      fieldset{
+        min-width: max-content;
+      }
+      h1{
+        height: 3rem;
+        border-bottom: 1px solid rgb(215, 208, 208);
+      }
+      .data_block{
+        flex-grow: 1;
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+
+        > input{
+          height: 3rem;
+          font-size: 1.2rem;
+          border-radius: 5px;
+          border: none;
+          outline: none;
+          margin: 10px 0px;
+          padding: 0 10px;
+        }
+        .add_room{
+          width: 100%;
+          display: flex;
+          justify-content: flex-start;
+
+          button {
+            color: white;
+            background-color: #635e5e;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 1.3rem;
+            margin: 10px 0px;
+            cursor: pointer;
+
+            &:hover {
+              opacity: .8;
+            }
+          }
+        }
+        .room_edit{
+          display: flex;
+          flex-direction: column;
+
+          .title{
+            width: 100%;
+            min-width: max-content;
+            height: 3rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid #aaa;
+            border-left: 4px solid #adaaaa;
+            border-radius: 0px 5px 5px 0px;
+            margin: 10px 0px;
+            padding: 0px 10px;
+            position: relative;
+
+            &:hover,
+            .editing {
+              color: white;
+              background-color: #6c6c6a;
+            }
+            i{
+              cursor: pointer;
+              position: absolute;
+              right: 10px;
+
+              &:hover {
+                color: rgb(193, 108, 108);
+              }
+            }
+          }
+          .edit_part{
+            display: flex;
+            flex-direction: column;
+
+            > input{
+              height: 2.4rem;
+              font-size: 1rem;
+              border-radius: 5px;
+              border: none;
+              outline: none;
+              margin: 5px 0px;
+              padding: 0 10px;
+            }
+            .equipment{
+              width: 100%;
+              height: 4rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border: 1px solid grey;
+              border-radius: 2px;
+              font-size: 1.2rem;
+              margin-top: 5px;
+              padding-right: 1.2rem;
+
+              .checkbox_box{
+                width: 33%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                
+                input {
+                  outline: none;
+                }
+              }
+            }
+          }
+        } 
+      }
     }
     .roomList{
       display: none;
+      width: calc(100% - 250px);
+      flex-grow: 1;
+
+      @include sm {
+        display: flex;
+        flex-direction: column;
+      }
+      
+      h1{
+        height: 50px;
+        border-bottom: 1px solid rgb(215, 208, 208);
+
+        span{
+          font-size: 20px;
+        }
+      }
+      .room_block{
+        // flex-grow: 1;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-auto-rows: 200px;
+        grid-gap: 20px;
+        padding-top: 20px;
+
+        @include lg {
+          grid-template-columns: 1fr 1fr;
+        }
+        @include xl {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
     }
   }
-  /* For Small Device */
-  @media all and (min-width: 414px) and (max-width: 768px){
-    .roomData{
-      width: 200px;
-    }
-    .roomList{
-      width: calc(100% - 200px);
-    }
-    .room_block{
-      width: 90%;
-      margin: auto;
-      display: flex;
-      flex-direction: column;
-    }
-  }
-  /* For Medium Device */  
-  @media all and (min-width: 768px) and (max-width: 992px){
-    .room_block{
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
+}
 </style>

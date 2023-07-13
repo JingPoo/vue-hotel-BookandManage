@@ -106,6 +106,10 @@
         searchedRooms.value = []
         comfirmRooms.value = []
     })
+    const cancelHandler = (()=>{
+        searchedRooms.value = []
+        comfirmRooms.value = []
+    })
 
     let timer = setInterval(function(){
         nextHandler()
@@ -185,17 +189,18 @@
                         <option v-for="index in roomOptions" :key="index" :value="index">{{index}}</option>
                     </select>
                 </div>
-                <button id="search-room" @click="searchHandler">搜尋</button> 
+                <button id="search-room" @click="searchHandler">搜尋</button>
             </div>
         </div>
-        <div class="comfirm" v-if="comfirmRooms.length">
+        <div class="comfirm bg-info-light-2" v-if="comfirmRooms.length">
             <h3>確認入住資訊:</h3>
             <div class="comfirmRoom" v-for="(room,index) in comfirmRooms" :key="index">
                 <span>{{ room.name }} ${{ room.final_price }}</span>
                 <i class="fa-solid fa-trash-can" @click="deleteRoomHandler(index)"></i>
             </div>
             <h4>= ${{ totalMoney }}</h4>
-            <button @click="comfirmHandler">確認</button>
+            <button class="btn-green" @click="comfirmHandler">確認</button>
+            <button class="btn-red" @click="cancelHandler">取消</button>
         </div>
         <div class="result">
             <SearchRoom 
@@ -210,417 +215,332 @@
         </div>
     </div>
 </template>
-<style scoped>
-    *{
-        padding: 0;
-        margin: 0;
-        text-decoration: none;
-        outline: none;
-    }
-    .container{
-        width: 100%;  
-        padding-top: 10px;    
-        display: flex;
-        flex-direction: column;
-        align-items: center;  
-        overflow: hidden;
-    }
-    .slideshow{
-        width: 600px;
-        height: 400px;
+<style scoped lang="scss">
+@import "../assets/style.scss";
+
+* {
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    outline: none;
+}
+.container {
+    width: 100%;  
+    padding-top: 2rem;    
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
+    overflow: hidden;
+
+    .slideshow {
+        width: 95vw;
+        height: 25rem;
         position: relative;
-    }
-    .slideshow .slide{
-        width: 100%;
-        height: 350px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        opacity: 0;
-        cursor: pointer;
-    }
-    .slide.show{
-        opacity: 1;
-        z-index: 99;
-        box-shadow: 0px 0px 10px grey;
-        animation: center 3s linear;
-    }
-    @keyframes center{
-        0%{
-            transform: translateX(10%);
-            opacity: .7;
+
+        @include md {
+            width: 40rem;
+            height: 28rem;
         }
-        10%{
-            transform: translateX(0);
-            opacity: 1;
+        @include xl {
+            width: 54rem;
+            height: 36rem;
         }
-        90%{
-            transform: translateX(0);
-            opacity: 1;
+        a {
+            font-size: 3rem;
+            color: gray;
+            position: absolute;
+            top: 40%;
+            cursor: pointer;
+            transition: .3s;
+
+            @include md {
+                top:35%
+            }
+            @include xl {
+                top: 40%;
+            }
+            &:hover{
+                color: $primary;
+            }
         }
-        100%{
-            transform: translateX(-10%);
-            opacity: .7;
+        .previous {
+            display: none;
+
+            @include md {
+                display: block;
+                left: -40px;
+                z-index: 20;
+            }
+            
+            &:hover{ 
+                transform: translateX(-5px);
+            }
+        }
+        .next {
+            display: none;
+
+            @include md {
+                display: block;
+                right: -40px;
+                z-index: 20;
+            }
+
+            &:hover{ 
+                transform: translateX(5px);
+            }
+        }
+        .dots {
+            width: 100%;
+            height: 4rem;
+            position: absolute;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .dot{
+                cursor: pointer;
+                height: 1rem;
+                width: 1rem;
+                margin: 0px 4px;
+                border-radius: 50%;
+                background-color: #bbb;
+
+                @include md {
+                    height: 0.8rem;
+                    width: 0.8rem;
+                }
+                &:hover,
+                &.now {
+                    background-color: #4e4c4c;
+                }
+            }
+        }
+        .slide {
+            width: 100%;
+            height: calc(100% - 4rem);
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+            
+            img {
+                width: 100%;
+                height: 100%;
+            }
+            .text {
+                position: absolute;
+                bottom: 1rem;
+                right: 1rem;
+                padding: .5rem 1rem;
+                border-radius: 16px;
+                background-color: rgba(0,0,0,.5);
+                color: white;
+                font-size: 20px;
+            }
+            &.show {
+                opacity: 1;
+                z-index: 10;
+                box-shadow: 0px 0px 10px gray;
+                animation: center 3s linear;
+            }
+            &.showLeft,
+            &.showRight {
+                opacity: .7;
+                position: absolute;
+
+                .text {
+                    display: none;
+                }
+            }
+            &.showLeft {
+                left: -100%;
+                animation: left 3s linear;
+            }
+            &.showRight {
+                left: 100%;
+                animation: right 3s linear;
+            }
         }
     }
-    .slide.showLeft,
-    .slide.showRight{
-        opacity: .7;
-        position: absolute;
-    }
-    .slide.showLeft{
-        left: -100%;
-        animation: left 3s linear;
-    }
-    @keyframes left{
-        0%{
-            transform: scale(.9);
-        }
-        10%{
-            transform: scale(.8);
-        }
-        100%{
-            transform: scale(.8);
-        }
-    }
-    .slide.showRight{
-        left: 100%;
-        animation: right 3s linear;
-    }
-    @keyframes right{
-        0%{
-            transform: scale(.8);
-        }
-        90%{
-            transform: scale(.8);
-        }
-        100%{
-            transform: scale(.9);
-        }
-    }
-    .slide.showLeft .text,
-    .slide.showRight .text{
-        display: none;
-    }
-    .slide .text{
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        color: white;
-        font-size: 20px;
-    }
-    .slideshow a{
-        font-size: 25px;
-        color: black;
-        position: absolute;
-        top: 45%;
-        cursor: pointer;
-        transition: .3s;
-    }
-    .slideshow a:hover{
-        color: #4e4c4c;
-    }
-    .previous{
-        left: -25px;
-    }
-    .previous:hover{
-        transform: translateX(-5px);
-    }
-    .next{
-        right: -25px;
-    }
-    .next:hover{
-        transform: translateX(5px);
-    }
-    .slideshow .dots{
-        width: 100%;
-        height: 50px;
-        position: absolute;
-        bottom: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .dot{
-        cursor: pointer;
-        height: 10px;
-        width: 10px;
-        margin: 0px 4px;
-        border-radius: 50%;
-        background-color: #bbb;
-    }
-    .dot.now,
-    .dot:hover{
-        background-color: #4e4c4c;
-    }
-    .slide img{
-        width: 100%;
-        height: 100%;
-    }
-    .quickBook{
-        width: 100%;
-        height: 150px;
+    .quickBook {
+        width: 80%;
+        height: 22rem;
         background-color: rgba(129, 123, 71, 0.377);
         backdrop-filter: blur(2px);
-        border-radius: 10px;
-        padding: 20px;
+        border-radius: 20px;
+        padding: 1rem 2rem;
         display: flex;
         flex-direction: column;
         align-items: center;
-    }
-    .quickBook h1{
-        height: 50px;
-    }
-    .book_block{
-        width: 100%;
-        flex-grow: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 20px;
-        gap: 15px;
-    }
-    .book_block .date{
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .book_block input{
-        font-size: 16px;
-    }
-    .room_detail{
-        display: flex;
-    }
-    .room_detail > label{
-        margin: 0px 5px;
-    }
-    .room_detail select{
-        width: 40px;
-        font-size: 20px;
-        border: none;
-        border-radius: 5px;
-    }
-    button#search-room{
-        height: 30px;
-        width: 60px;
-        line-height: 30px;
-        margin-left: 20px;
-        font-size: 16px;
-        border: none;
-        border-radius: 10px;
-        padding: 2px 5px;
-        color: white;
-        background-color: #326997;
-        cursor: pointer;
-    }
-    button#search-room:hover{
-        background-color: #21435f;
+
+        @include md {
+            height: 14rem;
+        }
+        h1{
+            height: 3rem;
+        }
+        .book_block {
+            width: 100%;
+            height: calc(100% - 3rem);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.2rem;
+
+            @include md {
+                gap: 1.2rem;
+                font-size: 1.4rem;
+            }
+            .date {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+
+                @include md {
+                    flex-direction: row;
+                }
+                input{
+                    font-size: 18px;
+                }
+            }
+            .room_detail{
+                display: flex;
+
+                label{
+                    margin: 0px 5px;
+                }
+                select{
+                    width: 40px;
+                    font-size: 20px;
+                    border: none;
+                    border-radius: 5px;
+                }
+            }
+            button#search-room{
+                height: 2.4rem;
+                width: 4rem;
+                line-height: 30px;
+                font-size: 1.2rem;
+                font-weight: bold;
+                border: none;
+                border-radius: 10px;
+                padding: 2px 5px;
+                margin-top: .2rem;
+                color: white;
+                background-color: #326997;
+                cursor: pointer;
+
+                @include md {
+                    margin-top: 0;
+                }
+                &:hover{
+                    background-color: #21435f;
+                }
+            }
+        }
     }
     .comfirm{
-        width: 100%;
-        padding-top: 10px;
+        width: 100vw;
+        height: max-content;
+        padding: 1rem 2rem;
+        position: fixed;
+        top: 4rem;
+        z-index: 90;
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
         align-items: center;
         gap: 20px;
         padding-bottom: 10px;
-    }
-    .comfirm h4{
-        font-size: 20px;
-        font-weight: normal;
-    }
-    .comfirm button{
-        padding: 5px 10px;
-        color: white;
-        background-color: rgb(184, 92, 92);
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        font-weight: bold;
-    }
-    .comfirm button:hover{
-        background-color: rgb(116, 58, 58);
-    }
-    .comfirmRoom{
-        background-color: rgb(199, 197, 188);
-        border-radius: 5px;
-        padding: 10px;
-        position: relative;
-    }
-    .comfirmRoom +.comfirmRoom::before{
-        content: '+';
-        position: absolute;
-        left: -14px;
-    }
-    .comfirmRoom i{
-        padding-left: 10px;
-        cursor: pointer;
-    }
-    .comfirmRoom i:hover{
-        color: rgb(193, 108, 108);
+        border-bottom: 2px solid rgb(15, 15, 43);
+
+        h4{
+            font-size: 20px;
+            font-weight: normal;
+        }
+        button{
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .comfirmRoom{
+            background-color: rgb(206, 234, 237);
+            border-radius: 5px;
+            padding: 10px;
+            position: relative;
+
+            i{
+                padding-left: 10px;
+                cursor: pointer;
+
+                &:hover{
+                    color: rgb(193, 108, 108);
+                }
+            }
+        }
+        .comfirmRoom +.comfirmRoom::before{
+            content: '+';
+            position: absolute;
+            left: -14px;
+        }
     }
     .result{
-        width: 100%;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        padding-top: 20px;
-        gap: 30px 20px;
-    }
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        padding-top: 1rem;
+        gap: 1rem;
 
-    /* For Mobile Device */
-    @media all and (max-width: 414px){
-        .slideshow{
-            width: 300px;
-            height: 200px;
-        }
-        .slideshow .slide{
-            width: 100%;
-            height: 150px;
-        }
-        .slideshow a{
-            top: 35%;
-        }
-        .quickBook{
-            height: 260px;
-        }
-        .quickBook h1{
-            font-size: 26px;
-        }
-        .book_block{
-            font-size: 14px;
-            gap: 5px;
-            display: flex;
-            flex-direction: column;
-        }
-        .book_block .date{
-            flex-direction: column;
-            gap: 2px;
-        }
-        .date span{
-            font-size: 12px;
-        }
-        .book_block input{
-            width: 92px;
-            font-size: 12px;
-        }
-        .room_detail select{
-            width: 30px;
-            font-size: 12px;
-        }
-        button#search-room{
-            margin-top: 10px;
-            margin-left: 0;
-            font-size: 14px;
-        }
-        .result{
-            display: flex;
-            flex-direction: column;
-        }
-        .comfirm h3{
-            font-size: 14px;
-        }
-        .comfirm span{
-            font-size: 12px;
-        }
-        .comfirm h4{
-            font-size: 14px;
+        @include lg {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
         }
     }
+}
 
-    /* For Small Device */
-    @media all and (min-width: 414px) and (max-width: 768px){
-        .slideshow{
-            width: 300px;
-            height: 250px;
-        }
-        .slideshow .slide{
-            width: 100%;
-            height: 200px;
-        }
-        .slideshow a{
-            top: 35%;
-        }
-        .quickBook{
-            height: 180px;
-        }
-        .quickBook h1{
-            font-size: 26px;
-        }
-        .book_block{
-            font-size: 14px;
-            gap: 5px;
-            display: flex;
-            flex-direction: column;
-        }
-        .book_block .date{
-            gap: 2px;
-        }
-        .date span{
-            font-size: 12px;
-        }
-        .book_block input{
-            width: 92px;
-            font-size: 12px;
-        }
-        .room_detail select{
-            width: 30px;
-            font-size: 12px;
-        }
-        button#search-room{
-            margin-top: 10px;
-            margin-left: 0;
-            font-size: 14px;
-        }
-        .comfirm h3{
-            font-size: 14px;
-        }
-        .comfirm span{
-            font-size: 12px;
-        }
-        .comfirm h4{
-            font-size: 14px;
-        }
+@keyframes center{
+    0%{
+        transform: translateX(10%);
+        opacity: .7;
     }
-
-    /* For Medium Device */  
-    @media all and (min-width: 768px) and (max-width: 992px){
-        .quickBook h1{
-            font-size: 30px;
-        }
-        .book_block{
-            font-size: 14px;
-            gap: 5px;
-        }
-        .book_block input{
-            font-size: 12px;
-        }
-        .room_detail select{
-            width: 30px;
-            font-size: 12px;
-        }
-        button#search-room{
-            height: 30px;
-            width: 60px;
-            line-height: 30px;
-            margin-left: 20px;
-            font-size: 14px;
-            border: none;
-            border-radius: 10px;
-            padding: 2px 5px;
-            color: white;
-            background-color: #326997;
-            cursor: pointer;
-        }
-        .comfirm h3{
-            font-size: 16px;
-        }
-        .comfirm span{
-            font-size: 14px;
-        }
-        .comfirm h4{
-            font-size: 16px;
-        }
+    10%{
+        transform: translateX(0);
+        opacity: 1;
     }
+    90%{
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100%{
+        transform: translateX(-10%);
+        opacity: .7;
+    }
+}
+@keyframes left{
+    0%{
+        transform: scale(.9);
+    }
+    10%{
+        transform: scale(.8);
+    }
+    100%{
+        transform: scale(.8);
+    }
+}
+@keyframes right{
+    0%{
+        transform: scale(.8);
+    }
+    90%{
+        transform: scale(.8);
+    }
+    100%{
+        transform: scale(.9);
+    }
+}
 </style>

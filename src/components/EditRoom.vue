@@ -72,23 +72,22 @@
     </div> 
 </template>
 
-<style scoped>
-    .room_container{
-        width: 100%;
-        min-width: 200px;
-        height: 100%;
-        min-height: 150px;
-        display: flex;
-        flex-direction: column;
-        box-shadow: 0px 0px 10px grey;
-        cursor: pointer;
-    }
-    .room_container:hover{
+<style scoped lang="scss">
+.room_container {
+    width: 100%;
+    min-width: 200px;
+    height: 100%;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 0px 10px grey;
+    cursor: pointer;
+
+    &:hover {
         opacity: .9;
-        /* box-shadow: 0px 0px 2px 4px rgb(162, 180, 206); */
-    }
-    .room_container:hover .cover h3{
-        transform: translateX(20px);
+        .cover h3{
+            transform: translateX(20px);
+        }
     }
     .cover{
         width: 100%;
@@ -97,26 +96,28 @@
         position: relative;
         background-size: cover;
         background-position: center center;
-    }
-    .cover h3{
-        font-size: 20px;
-        background-color: #fff;
-        padding: 5px 10px;
-        position: absolute;
-        left: 0;
-        bottom: 10%;
-        opacity: .9;
-        transition: transform .5s;
-    }
-    .cover i{
-        font-size: 20px;
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        cursor: pointer;
-    }
-    .cover i:hover{
-        color: rgb(193, 108, 108);
+
+        h3{
+            font-size: 20px;
+            background-color: #fff;
+            padding: 5px 10px;
+            position: absolute;
+            left: 0;
+            bottom: 10%;
+            opacity: .9;
+            transition: transform .5s;
+        }
+        i{
+            font-size: 20px;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+
+            &:hover {
+                color: rgb(193, 108, 108);
+            }
+        }
     }
     .info{
         width: 100%;
@@ -125,46 +126,37 @@
         flex-direction: column;
         padding: 10px;
         position: relative;
-    }
-    .nameIcon{
-        display: flex;
-    }
-    .nameIcon .icons{
-        padding-left: 10px;
-        color: #5f5b5b;
-        font-size: 12px;
-    }
-    .nameIcon .icons i{
-        margin: 0 2px;
-    }
-    .info h5{
-        font-size: 12px;
-    }
-    .info .icons{
-        display: inline;
-    }
-    .info .final_price{
-        color: rgb(225, 83, 83);
-        position: absolute;
-        right: 10px;
-        bottom: 10px;
-    }
-    .info .final_price::before{
-        content: '$';
-    }
-    .info > h4 > span{
-        text-decoration: line-through;
-    }
-    
-    /* For Small Device */
-    @media all and (min-width: 414px) and (max-width: 768px){
-        .room_container{
-            min-width: 200px;
-            height: 200px;
+
+        .nameIcon{
+            display: flex;
+
+            .icons{
+                display: inline;
+                padding-left: 10px;
+                color: #5f5b5b;
+                font-size: 12px;
+
+                i{
+                    margin: 0 2px;
+                }
+            }
         }
-        .info .final_price{
-            right: 50px;
+        h5{
+            font-size: 12px;
+        }
+        .final_price{
+            color: rgb(225, 83, 83);
+            position: absolute;
+            right: 10px;
             bottom: 10px;
-         }   
+
+            &::before {
+                content: '$';
+            }
+        }
+        > h4 > span{
+            text-decoration: line-through;
+        }
     }
+}
 </style>

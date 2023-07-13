@@ -1,0 +1,132 @@
+@use "sass:math";
+
+// variables
+$primary: #b6a96a;
+$info: #326dee;
+$error: #d32752;
+
+
+// color palette
+$colors: (
+    "primary": $primary,
+    "info": $info,
+    "error": $error,
+    "gray": #6b7280,
+    "red": #ef4444,
+    "orange": #f97316,
+    "yellow": #eab308,
+    "green": #22c55e,
+    "blue": #3b82f6,
+    "purple": #a855f7,
+    "black": black,
+    "white": white,
+);
+// generate css class
+@each $key, $val in $colors {
+    .text-#{$key} {
+        color: $val;
+    }
+    .text-hover-#{$key} {
+        &:hover {
+            color: $val;
+        }
+    }
+    .bg-#{$key} {
+        background-color: $val;
+    }
+
+    @if($val != black and $val != white){
+        // light version
+        @for $i from 1 through 9 {
+            .text-#{$key}-light-#{$i} {
+                color: mix(white, $val, $i * 10%);
+            }
+            .text-hover-#{$key}-light-#{$i} {
+                &:hover {
+                    color: mix(white, $val, $i * 10%); 
+                }
+            }
+            .bg-#{$key}-light-#{$i} {
+                background-color: mix(white, $val, $i * 10%);
+            }
+        }
+        // dark version
+        @for $i from 1 through 9 {
+            .text-#{$key}-dark-#{$i} {
+                color: mix(black, $val, $i * 10%);
+            }
+            .text-hover-#{$key}-dark-#{$i} {
+                &:hover {
+                    color: mix(black, $val, $i * 10%); 
+                }
+            }
+            .bg-#{$key}-dark-#{$i} {
+                background-color: mix(black, $val, $i * 10%);
+            }
+        }
+    }
+}
+@mixin btn($bg-color: #e2e2e2) {
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    border: 0;
+    padding: 4px 8px;
+    border-radius: 5px;
+    background-color: $bg-color;
+}
+.btn {
+    @include btn;
+}
+@each $key, $val in $colors {
+    .btn-#{$key} {
+        @include btn($val);
+        &:hover {
+            background-color: lighten($val, 5);
+        }
+    }
+    .btn-outline-#{$key} {
+        @include btn(transparent);
+        border: 2px solid $val;
+        &:hover {
+            background-color: $val;
+        }
+    }
+}
+
+
+// media query
+$breakpoints: (
+    "xs": 0,
+    "sm": 640px,
+    "md": 768px,
+    "lg": 1024px,
+    "xl": 1280px,
+);
+
+@mixin xs {
+    @media(min-width: map-get($breakpoints, "xs")){
+        @content;
+    }
+}
+@mixin sm {
+    @media(min-width: map-get($breakpoints, "sm")){
+        @content;
+    }
+}
+@mixin md {
+    @media(min-width: map-get($breakpoints, "md")){
+        @content;
+    }
+}
+@mixin lg {
+    @media(min-width: map-get($breakpoints, "lg")){
+        @content;
+    }
+}
+@mixin xl {
+    @media(min-width: map-get($breakpoints, "xl")){
+        @content;
+    }
+}
+
