@@ -192,16 +192,18 @@
                 <button id="search-room" @click="searchHandler">搜尋</button>
             </div>
         </div>
-        <div class="comfirm bg-info-light-2" v-if="comfirmRooms.length">
-            <h3>確認入住資訊:</h3>
-            <div class="comfirmRoom" v-for="(room,index) in comfirmRooms" :key="index">
-                <span>{{ room.name }} ${{ room.final_price }}</span>
-                <i class="fa-solid fa-trash-can" @click="deleteRoomHandler(index)"></i>
+        <transition name="comfirmbox">
+            <div class="comfirm bg-info-light-2" v-if="comfirmRooms.length">
+                <h3>確認入住資訊:</h3>
+                <div class="comfirmRoom" v-for="(room,index) in comfirmRooms" :key="index">
+                    <span>{{ room.name }} ${{ room.final_price }}</span>
+                    <i class="fa-solid fa-trash-can" @click="deleteRoomHandler(index)"></i>
+                </div>
+                <h4>= ${{ totalMoney }}</h4>
+                <button class="btn-green" @click="comfirmHandler">確認</button>
+                <button class="btn-red" @click="cancelHandler">取消</button>
             </div>
-            <h4>= ${{ totalMoney }}</h4>
-            <button class="btn-green" @click="comfirmHandler">確認</button>
-            <button class="btn-red" @click="cancelHandler">取消</button>
-        </div>
+        </transition>
         <div class="result">
             <SearchRoom 
                 v-for="room in searchedRooms" 
@@ -502,7 +504,12 @@
         }
     }
 }
-
+.comfirmbox-enter-active {
+    animation: tvin .3s ease;
+}
+.comfirmbox-leave-active {
+    animation: tvout .3s ease;
+}
 @keyframes center{
     0%{
         transform: translateX(10%);
@@ -543,4 +550,25 @@
         transform: scale(.9);
     }
 }
+@keyframes tvin {
+    0%{
+        opacity: 0;
+        transform: scale(.5);
+    }
+    100%{
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+@keyframes tvout {
+    0%{
+        opacity: 1;
+        transform: scale(1);
+    }
+    100%{
+        opacity: 0;
+        transform: scale(.5);
+    }
+}
+
 </style>

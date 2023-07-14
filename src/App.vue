@@ -13,7 +13,15 @@ const menuShow = ref(false)
         <i class="fa-solid fa-bars" v-show="!menuShow"></i>
         <i class="fa-solid fa-x" v-show="menuShow"></i>
       </div>
-      <ul :class="{show: menuShow}">
+      <ul class="menu">
+        <li>
+          <router-link to="/vue-hotel-BookandManage/roomBook" @click="menuShow = false">房間瀏覽</router-link>
+        </li>
+        <li>
+          <router-link to="/vue-hotel-BookandManage/roomManage" @click="menuShow = false">房間管理</router-link>
+        </li>
+      </ul>
+      <ul class="burgerMenu" :class="{show: menuShow}">
         <li>
           <router-link to="/vue-hotel-BookandManage/roomBook" @click="menuShow = false">房間瀏覽</router-link>
         </li>
@@ -96,38 +104,16 @@ nav {
         display: none;
       }
     }
-    ul {
+    .menu {
       display: none;
       width: calc(100% - 6rem);
       height: 100%;
       padding-right: 30px;
+
       @include md {
         display: flex;
         justify-content: flex-end;
       }
-
-      &.show {
-        transform: translateY(4rem);
-        width: 100vw;
-        height: max-content;
-        background-color: lighten($primary, 5);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        border-top: 2px solid darken($primary, 20);
-        border-bottom: 2px solid darken($primary, 20);
-        position: absolute;
-        left: 0; 
-
-        li {
-          width: max-content;
-          padding: 1rem 0;
-        }
-        li + li {
-          border-top: 2px solid darken($primary, 10);
-        }
-      }
-
       li {
         width: max-content;
         padding: 0 2rem;
@@ -143,6 +129,43 @@ nav {
           opacity: 1;
           font-weight: bold;
         }
+      }
+    }
+    .burgerMenu {
+      width: 100vw;
+      height: max-content;
+      background-color: lighten($primary, 5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-top: 2px solid darken($primary, 20);
+      border-bottom: 2px solid darken($primary, 20);
+      position: absolute;
+      top: 100%;
+      left: 100%; 
+      transition: all .3s ease;
+
+      @include md {
+        display: none;
+      }
+      &.show {
+        transform: translateX(-100%);
+      } 
+      li {
+        width: max-content;
+        padding: 1rem 0;
+
+        a {
+          font-size: 1.6rem;
+        }
+        a.router-link-active,
+        a:hover {
+          opacity: 1;
+          font-weight: bold;
+        }
+      }
+      li + li {
+        border-top: 2px solid darken($primary, 10);
       }
     }
   }
