@@ -1,16 +1,5 @@
 <script setup>
-    import { ref, computed } from 'vue'
-    // const room1 = new URL("../assets/economy-double.jpg", import.meta.url).href;
-    // const room2 = new URL("../assets/business-double.jpg", import.meta.url).href;
-    // const room3 = new URL("../assets/city-view-double.jpg", import.meta.url).href;
-    // const room4 = new URL("../assets/sea-view-double.jpeg", import.meta.url).href;
-    // const room5 = new URL("../assets/deluxe-double.jpeg", import.meta.url).href;
-    // const room6 = new URL("../assets/sea-view-single.jpg", import.meta.url).href;
-    // const room7 = new URL("../assets/city-view-quadruple.jpg", import.meta.url).href;
-    // const room8 = new URL("../assets/bali-triple.jpg", import.meta.url).href;
-    // const room9 = new URL("../assets/comfort-quadruple.jpg", import.meta.url).href;
-    // const room10 = new URL("../assets/business-single.jpg", import.meta.url).href;
-    // const room11 = new URL("../assets/small-triple.jpeg", import.meta.url).href;
+    import { computed } from 'vue'
 
     const props = defineProps({
         roomData: {

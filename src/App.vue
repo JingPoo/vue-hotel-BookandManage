@@ -32,7 +32,11 @@ const menuShow = ref(false)
     </div>
   </nav>
   <div class="view-container">
-    <router-view></router-view>
+    <router-view v-slot="{ Component }">
+      <Transition appear name="fade" mode="out-in">
+        <component :is="Component"></component>
+      </Transition>
+    </router-view>
   </div>
 </template>
 
@@ -175,5 +179,19 @@ nav {
   max-width: 1560px;
   min-width: max-content;
   margin: auto;
+}
+.fade-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.fade-enter-active {
+  transition: all .2s ease-out;
+}
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.fade-leave-active {
+  transition: all .2s ease-in;
 }
 </style>

@@ -107,7 +107,7 @@
           </div>
         </div>
       </div>
-      <div class="room_block">
+      <TransitionGroup appear tag="div" name="jumpin" mode="out-in" class="room_block">
         <Room 
           v-for="(room, index) in sortedFilteredRooms" 
           :key="room.id"
@@ -116,7 +116,8 @@
           :hotelFee="service_fee"
           @click="roomClickHandler(index)">
         </Room>
-        <Teleport to="body">
+      </TransitionGroup>
+      <Teleport to="body">
           <RoomModal 
             v-for="(room, index) in sortedFilteredRooms" 
             :key="room.id"
@@ -127,7 +128,6 @@
             @close="showModal = -1">
           </RoomModal>
         </Teleport>
-      </div>
     </div>
   </div>
 </template>
@@ -262,5 +262,13 @@
       }
     }
   }
+}
+.jumpin-enter-from {
+  opacity: 0;
+  transform: scale(.5);
+  transform: rotate(20deg) translateX(100px);
+}
+.jumpin-enter-active {
+  transition: all .2s ease-out;
 }
 </style>
