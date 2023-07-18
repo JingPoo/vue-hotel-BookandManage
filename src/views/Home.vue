@@ -6,7 +6,6 @@
     import { useStore } from 'vuex'
 
     const store = useStore()
-
     const today = ref(new Date().toISOString().split('T')[0])
     const checkin_date = ref(today)
     const checkout_date = ref(new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0])
@@ -79,24 +78,29 @@
     })
 
     const roomClickHandler = ((room)=>{
-        let finalPrice = parseInt(room.price * discount.value * room.discount + service_fee.value)
-        let totalPeople = adult.value + children.value
+        if(store.state.user) {
+            let finalPrice = parseInt(room.price * discount.value * room.discount + service_fee.value)
+            let totalPeople = adult.value + children.value
+            
+            nightCount.value += parseFloat((room.size/totalPeople).toFixed(2))
+            // console.log(nightCount.value, nightStay.value, comfirmRooms.value.length, nightStay.value*roomAmount.value)
+            // 依照所選房型大小計算共可以選房 && 每晚住房數不能超過所選
+            if(nightCount.value > nightStay.value || comfirmRooms.value.length > nightStay.value*roomAmount.value){
+                nightCount.value -= parseFloat((room.size/totalPeople).toFixed(2))
+                return
+            }   
+            // if(comfirmRooms.value.length >= nightStay.value) return
+            comfirmRooms.value.push({
+                name: room.name,
+                size: room.size,
+                final_price: finalPrice
+            })
+            // console.log(nightCount.value)
+            totalMoney.value += parseInt(finalPrice)
+        } else {
+            alert('請先登入會員')
+        }
         
-        nightCount.value += parseFloat((room.size/totalPeople).toFixed(2))
-        // console.log(nightCount.value, nightStay.value, comfirmRooms.value.length, nightStay.value*roomAmount.value)
-        // 依照所選房型大小計算共可以選房 && 每晚住房數不能超過所選
-        if(nightCount.value > nightStay.value || comfirmRooms.value.length > nightStay.value*roomAmount.value){
-            nightCount.value -= parseFloat((room.size/totalPeople).toFixed(2))
-            return
-        }   
-        // if(comfirmRooms.value.length >= nightStay.value) return
-        comfirmRooms.value.push({
-            name: room.name,
-            size: room.size,
-            final_price: finalPrice
-        })
-        // console.log(nightCount.value)
-        totalMoney.value += parseInt(finalPrice)
     })
     const deleteRoomHandler = ((index)=>{
         let totalPeople = adult.value + children.value
@@ -107,6 +111,10 @@
     const comfirmHandler = (()=>{
         alert('訂房已確認! 歡迎您入住')
         searchedRooms.value = []
+        store.commit('setUserReserve', { 
+            uid: store.state.user['uid'],
+            reserved: comfirmRooms.value
+        })
         comfirmRooms.value = []
     })
     const cancelHandler = (()=>{
@@ -198,7 +206,7 @@
         <transition name="comfirmbox">
             <div class="comfirm bg-info-light-2" v-if="comfirmRooms.length">
                 <h3>確認入住資訊:</h3>
-                <div class="comfirmRoom" v-for="(room,index) in comfirmRooms" :key="index">
+                <div class="comfirmRoom" v-for="(room, index) in comfirmRooms" :key="index">
                     <span>{{ room.name }} ${{ room.final_price }}</span>
                     <i class="fa-solid fa-trash-can" @click="deleteRoomHandler(index)"></i>
                 </div>

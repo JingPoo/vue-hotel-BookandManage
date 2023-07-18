@@ -19,22 +19,32 @@ const submitHandler = async () => {
         router.push('/')
     } catch (err) {
         error.value = err.message
+        alert(error.value)
     }
 }
 </script>
 <template>
-    <form @submit.prevent="submitHandler">
-        <h3 class="text-xl font-bold">會員登入</h3>
+    <div>
+        <form @submit.prevent="submitHandler">
+            <h3 class="text-xl font-bold">會員登入</h3>
 
-        <label for="email">Email:</label>
-        <input type="email" name="email" v-model="email" required>
+            <label for="email">Email:</label>
+            <input type="email" name="email" v-model.trim="email" required>
 
-        <label for="password">Password:</label>
-        <input type="password" name="password" v-model="password" required>
+            <label for="password">Password:</label>
+            <input type="password" name="password" v-model.trim="password" required>
 
-        <button>Log in</button>
-        <div v-if="error">{{ error }}</div>
-    </form>
+            <button>Log in</button>
+        </form>
+        <div class="test">
+            <h3>Test User:</h3>
+            <h4>Email: test@gmail.com</h4>
+            <h4>Password: 123456</h4>
+            <h3>Admin:</h3>
+            <h4>Email: admin@gmail.com</h4>
+            <h4>Password: admin123</h4>
+        </div>
+    </div>
 </template>
 <style scoped lang="scss">
 @import "../assets/style.scss";
@@ -72,5 +82,10 @@ form {
             opacity: .8;
         }
     }
+}
+.test {
+    color: gray;
+    text-align: center;
+    margin-top: 2rem;
 }
 </style>

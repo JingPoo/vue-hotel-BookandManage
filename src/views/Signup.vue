@@ -19,6 +19,7 @@ const submitHandler = async () => {
         router.push('/')
     } catch (err) {
         error.value = err.message
+        alert(error.value)
     }
 }
 </script>

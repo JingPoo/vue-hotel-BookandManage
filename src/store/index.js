@@ -13,6 +13,7 @@ const store = createStore({
     state: {
         user: null,
         authIsReady: false,
+        // reserve: {},
     },
     mutations: {
         setUser(state, payload) {
@@ -21,6 +22,10 @@ const store = createStore({
         },
         setAuthIsReady(state, payload) {
             state.authIsReady = payload
+        },
+        setUserReserve(state, {uid, reserved}) {
+            // state.reserve[uid] = reserved
+            localStorage.setItem(uid, JSON.stringify(reserved))
         }
     },
     actions: {

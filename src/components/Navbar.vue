@@ -2,9 +2,13 @@
 import { ref } from 'vue'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+
 const store = useStore()
+const router = useRouter()
 const clickHandler = () => {
     store.dispatch('logout')
+    router.push('/')
 }
 const user = computed(() => store.state.user)
 const authIsReady = computed(() => store.state.authIsReady)
@@ -15,52 +19,60 @@ const menuShow = ref(false)
   <nav>
     <div class="nav-container" v-if="authIsReady">
       <h1>
-        <router-link to="/" @click="menuShow = false">Jing Hotel</router-link>
+            <router-link to="/" @click="menuShow = false">Jing Hotel</router-link>
       </h1>
       <div class="burger" @click="menuShow = !menuShow">
-        <i class="fa-solid fa-bars" v-show="!menuShow"></i>
-        <i class="fa-solid fa-x" v-show="menuShow"></i>
+            <i class="fa-solid fa-bars" v-show="!menuShow"></i>
+            <i class="fa-solid fa-x" v-show="menuShow"></i>
       </div>
       <ul class="menu">
         <li>
-          <router-link to="/vue-hotel-BookandManage/roomBook" @click="menuShow = false">房間瀏覽</router-link>
+            <router-link to="/vue-hotel-BookandManage/roomBook" @click="menuShow = false">房間瀏覽</router-link>
         </li>
         <li>
-          <router-link to="/vue-hotel-BookandManage/roomManage" @click="menuShow = false">房間管理</router-link>
+            <i class="icon fa-solid fa-lock"></i>
+            <router-link to="/vue-hotel-BookandManage/roomManage" @click="menuShow = false">房間管理</router-link>
         </li>
 
         <div v-if="user" class="forlogin">
-          <span>{{ user.email }}</span>
-          <button class="btn" @click="clickHandler">會員登出</button>
+            <li>
+                <router-link to="/vue-hotel-BookandManage/reserve" @click="menuShow = false">我的訂單</router-link>
+            </li>
+            <span>{{ user.email }}</span>
+            <button class="btn" @click="clickHandler">會員登出</button>
         </div>
         <div v-else class="forlogout">
           <li>
-            <router-link to="/vue-hotel-BookandManage/Login" @click="menuShow = false">登入</router-link>
+                <router-link to="/vue-hotel-BookandManage/login" @click="menuShow = false">登入</router-link>
           </li>
           <li>
-            <router-link to="/vue-hotel-BookandManage/Signup" @click="menuShow = false">註冊會員</router-link>
+             <router-link to="/vue-hotel-BookandManage/signup" @click="menuShow = false">註冊會員</router-link>
           </li>
         </div>
       </ul>
 
       <ul class="burgerMenu" :class="{show: menuShow}">
         <li>
-          <router-link to="/vue-hotel-BookandManage/roomBook" @click="menuShow = false">房間瀏覽</router-link>
+            <router-link to="/vue-hotel-BookandManage/roomBook" @click="menuShow = false">房間瀏覽</router-link>
         </li>
         <li>
-          <router-link to="/vue-hotel-BookandManage/roomManage" @click="menuShow = false">房間管理</router-link>
+            <i class="icon fa-solid fa-lock"></i>
+            <router-link to="/vue-hotel-BookandManage/roomManage" @click="menuShow = false">房間管理</router-link>
         </li>
 
         <div v-if="user" class="forlogin">
-          <span> {{ user.email }}</span>
-          <button class="btn" @click="clickHandler">登出</button>
+            <li>
+                <router-link to="/vue-hotel-BookandManage/reserve" @click="menuShow = false">我的訂單</router-link>
+            </li>
+            <span> {{ user.email }}</span>
+            <button class="btn" @click="clickHandler">登出</button>
         </div>
         <div v-else class="forlogout">
           <li>
-            <router-link to="/vue-hotel-BookandManage/Login" @click="menuShow = false">登入</router-link>
+                <router-link to="/vue-hotel-BookandManage/login" @click="menuShow = false">登入</router-link>
           </li>
           <li>
-            <router-link to="/vue-hotel-BookandManage/Signup" @click="menuShow = false">註冊會員</router-link>
+                <router-link to="/vue-hotel-BookandManage/signup" @click="menuShow = false">註冊會員</router-link>
           </li>
         </div>
       </ul>
@@ -195,6 +207,8 @@ nav {
       li {
         width: max-content;
         padding: 1rem 0;
+        display: flex;
+        align-items: center;
 
         a {
           font-size: 1.6rem;
@@ -240,5 +254,9 @@ nav {
       }
     }
   }
+}
+.icon {
+    color: white;
+    padding-right: 2px;
 }
 </style>
