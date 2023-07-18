@@ -3,6 +3,9 @@
     import axios from 'axios';
     import SearchRoom from '../components/SearchRoom.vue'
     import RoomModal from '../components/RoomModal.vue'
+    import { useStore } from 'vuex'
+
+    const store = useStore()
 
     const today = ref(new Date().toISOString().split('T')[0])
     const checkin_date = ref(today)
@@ -140,7 +143,7 @@
     })
 </script>
 <template>
-    <div class="container">
+    <div class="container" v-if="rooms.length">
         <div class="slideshow">
             <div class="slide" 
             v-for="(room, index) in rooms" :key="index" :class="[{show: nowShow === index},{showLeft: (nowShow - 1 + totalRooms) % totalRooms === index},{showRight: (nowShow + 1 + totalRooms) % totalRooms === index}]"
@@ -215,6 +218,9 @@
                 >
             </SearchRoom>
         </div>
+    </div>
+    <div class="loading" v-else>
+        Loading...
     </div>
 </template>
 <style scoped lang="scss">
@@ -504,6 +510,11 @@
         }
     }
 }
+.loading {
+  text-align: center;
+  margin-top: 3rem;
+}
+
 .comfirmbox-enter-active {
     animation: tvin .3s ease;
 }

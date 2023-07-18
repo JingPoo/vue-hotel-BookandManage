@@ -200,7 +200,7 @@
 </script>
 
 <template>
-  <div class="container">
+  <div class="container" v-if="rooms.length">
     <div class="wrapper">
       <div class="roomData">
         <h1>房間資料</h1>
@@ -266,6 +266,9 @@
         </div>
       </div>
     </div>   
+  </div>
+  <div class="loading" v-else>
+    Loading...
   </div>
 </template>
 
@@ -450,5 +453,9 @@
       }
     }
   }
+}
+.loading {
+  text-align: center;
+  margin-top: 3rem;
 }
 </style>

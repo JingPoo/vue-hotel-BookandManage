@@ -88,7 +88,7 @@
 </script>
 
 <template>
-  <div class="container">
+  <div class="container" v-if="rooms.length">
     <div class="roomList">
       <div class="title">
         <h1>房間列表 <span>({{ filteredRooms.length }}間)</span></h1>
@@ -129,6 +129,9 @@
           </RoomModal>
         </Teleport>
     </div>
+  </div>
+  <div class="loading" v-else>
+    Loading...
   </div>
 </template>
 
@@ -263,6 +266,11 @@
     }
   }
 }
+.loading {
+  text-align: center;
+  margin-top: 3rem;
+}
+
 .jumpin-enter-from {
   opacity: 0;
   transform: scale(.5);
