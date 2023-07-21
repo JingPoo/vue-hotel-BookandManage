@@ -26,7 +26,7 @@ const deleteReserve = () => {
                 <h3>{{ r.name }}</h3>
                 <h4>每晚${{ r.final_price }}</h4>
             </div>
-            <button @click="deleteReserve">取消訂單</button>
+            <!-- <button @click="deleteReserve">取消訂單</button> -->
         </div>
         <div v-else class="noreserve">
             <h3>您尚未有訂單</h3>

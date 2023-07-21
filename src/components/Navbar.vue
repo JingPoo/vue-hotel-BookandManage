@@ -191,6 +191,7 @@ nav {
       display: flex;
       flex-direction: column;
       align-items: center;
+      visibility: hidden;
       border-top: 2px solid darken($primary, 20);
       border-bottom: 2px solid darken($primary, 20);
       position: absolute;
@@ -202,6 +203,7 @@ nav {
         display: none;
       }
       &.show {
+        visibility: visible;
         transform: translateX(-100%);
       } 
       li {
