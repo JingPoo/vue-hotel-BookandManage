@@ -1,36 +1,35 @@
 <script setup>
-    import { computed } from 'vue'
+import { computed } from 'vue'
 
-    const props = defineProps({
-        roomData: {
-            type: Object,
-            required: true
-        },
-        hotelDiscount: {
-            type: Number,
-            default: 0.9
-        },
-        hotelFee: {
-            type: Number,
-            default: 200
-        }
-    })
+const props = defineProps({
+    roomData: {
+        type: Object,
+        required: true
+    },
+    hotelDiscount: {
+        type: Number,
+        default: 0.9
+    },
+    hotelFee: {
+        type: Number,
+        default: 200
+    }
+})
 
-    const final_discount = computed(()=>{
-        return props.roomData.discount * props.hotelDiscount
-    })
-    const final_discount_show = computed(()=>{
-        return parseInt(final_discount.value*100)
-    })
-    const final_price = computed(()=>{
-        return parseInt(props.roomData.price * final_discount.value + props.hotelFee * 1.0)
-    })
-    const bg_css = computed(()=>{
-        return {
-            backgroundImage: `url(${props.roomData.cover})`
-        }
-    })
-
+const final_discount = computed(()=>{
+    return props.roomData.discount * props.hotelDiscount
+})
+const final_discount_show = computed(()=>{
+    return parseInt(final_discount.value*100)
+})
+const final_price = computed(()=>{
+    return parseInt(props.roomData.price * final_discount.value + props.hotelFee * 1.0)
+})
+const bg_css = computed(()=>{
+    return {
+        backgroundImage: `url(${props.roomData.cover})`
+    }
+})
 </script>
 
 <template>

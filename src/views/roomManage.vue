@@ -1,202 +1,201 @@
 <script setup>
-  import { ref, onMounted, onUpdated} from 'vue'
-  import EditRoom from '../components/EditRoom.vue'
-  import axios from 'axios'
+import { ref, onMounted, onUpdated} from 'vue'
+import EditRoom from '../components/EditRoom.vue'
+import axios from 'axios'
 
-  const rooms = ref([])
-  const newRoom = ref({
-    name: "新房間",
-    eng: "New Room",
-    size: 2,
-    price: 2000,
-    amount: 1,
-    cover: "https://img.freepik.com/free-photo/small-hotel-bedroom-with-white-walls-panoramic-window_1262-12488.jpg?size=626&ext=jpg&ga=GA1.1.125570085.1686126382&semt=sph",
-    discount: 0.9,
-    editing: false,
-    equipment: {
-      wifi: false,
-      bathtub: false,
-      breakfast: false
-    }
-  })
-  const inputName = ref('')
-  const inputEng = ref('')
-  const inputSize = ref(0)
-  const inputPrice = ref(0)
-  const inputDiscount = ref(0)
-  const inputCover = ref('')
-  const wifiChecked = ref(false)
-  const bathtubChecked = ref(false)
-  const breakfastChecked = ref(false)
+const rooms = ref([])
+const newRoom = ref({
+  name: "新房間",
+  eng: "New Room",
+  size: 2,
+  price: 2000,
+  amount: 1,
+  cover: "https://img.freepik.com/free-photo/small-hotel-bedroom-with-white-walls-panoramic-window_1262-12488.jpg?size=626&ext=jpg&ga=GA1.1.125570085.1686126382&semt=sph",
+  discount: 0.9,
+  editing: false,
+  equipment: {
+    wifi: false,
+    bathtub: false,
+    breakfast: false
+  }
+})
+const inputName = ref('')
+const inputEng = ref('')
+const inputSize = ref(0)
+const inputPrice = ref(0)
+const inputDiscount = ref(0)
+const inputCover = ref('')
+const wifiChecked = ref(false)
+const bathtubChecked = ref(false)
+const breakfastChecked = ref(false)
 
-  const discount = ref(0.9) // 飯店折扣
-  const service_fee = ref(200) // 服務費
-  const edit_id = ref(-1) // 正在編輯的房間index
-  const id = ref(rooms.value.length)
+const discount = ref(0.9) // 飯店折扣
+const service_fee = ref(200) // 服務費
+const edit_id = ref(-1) // 正在編輯的房間index
 
-  onMounted(()=>{
-    axios.get('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms')
+onMounted(()=>{
+  axios.get('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms')
+    .then((res)=>{
+      rooms.value = res.data
+    }).catch((err)=>{
+      console.log(err)
+    })
+})
+const add_room = (()=>{
+  axios.post('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms', newRoom.value)
+    .then((res)=>{
+      rooms.value.push(res.data)
+      edit_id.value = rooms.value.length - 1
+    }).catch((err)=>{
+      console.log(err)
+    })
+})
+const delete_room = ((index)=>{
+  let target = rooms.value[index]
+  if(confirm(`是否刪除 ${target.name}?`)){
+    axios.delete('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + target.id)
       .then((res)=>{
-        rooms.value = res.data
+        rooms.value.splice(index, 1)
+      }).catch((err)=>{
+      console.log(err)
+    })
+  }
+})
+// // 讓視窗捲動到編輯處
+// onUpdated(()=>{
+//   const el = document.querySelector('.editing')
+//   if(el){
+//     let top = el.getBoundingClientRect().top
+//     window.scrollTo(0, top)
+//   }
+// })
+const editClickHandler = ((index)=>{
+  if(edit_id.value == index){
+    edit_id.value = -1
+  }
+  else{
+    edit_id.value = index
+  }
+})
+
+const nameEditHandler = ((index)=>{
+  inputName.value = rooms.value[index].name
+  let id = rooms.value[index].id
+  if(!inputName.value) return 
+  else{
+    axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {name: inputName.value})
+    .then((res)=>{
+      rooms.value[index].name = res.data.name
+      inputName.value = {name: ''}
+    }).catch((err)=>{
+      console.log(err)
+  })
+  }
+})
+const engEditHandler = ((index)=>{
+  inputEng.value = rooms.value[index].eng
+  let id = rooms.value[index].id
+  if(!inputEng.value) return 
+  else{
+    axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {eng: inputEng.value})
+      .then((res)=>{
+        rooms.value[index].eng = res.data.eng
+        inputEng.value = {eng: ''}
       }).catch((err)=>{
         console.log(err)
-      })
-  })
-  const add_room = (()=>{
-    axios.post('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms', newRoom.value)
+    })
+  }
+})
+const sizeEditHandler = ((index)=>{
+  inputSize.value = rooms.value[index].size
+  let id = rooms.value[index].id
+  if(!inputSize.value || inputSize.value < 0 || inputSize.value > 4) return 
+  else{
+    axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {size: inputSize.value})
       .then((res)=>{
-        rooms.value.push(res.data)
-        edit_id.value = rooms.value.length - 1
-      }).catch((err)=>{
-        console.log(err)
-      })
-  })
-  const delete_room = ((index)=>{
-    let target = rooms.value[index]
-    if(confirm(`是否刪除 ${target.name}?`)){
-      axios.delete('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + target.id)
-        .then((res)=>{
-          rooms.value.splice(index, 1)
-        }).catch((err)=>{
-        console.log(err)
-      })
-    }
-  })
-  // // 讓視窗捲動到編輯處
-  // onUpdated(()=>{
-  //   const el = document.querySelector('.editing')
-  //   if(el){
-  //     let top = el.getBoundingClientRect().top
-  //     window.scrollTo(0, top)
-  //   }
-  // })
-  const editClickHandler = ((index)=>{
-    if(edit_id.value == index){
-      edit_id.value = -1
-    }
-    else{
-      edit_id.value = index
-    }
-  })
-
-  const nameEditHandler = ((index)=>{
-    inputName.value = rooms.value[index].name
-    let id = rooms.value[index].id
-    if(!inputName.value) return 
-    else{
-      axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {name: inputName.value})
-      .then((res)=>{
-        rooms.value[index].name = res.data.name
-        inputName.value = {name: ''}
+        rooms.value[index].size = res.data.size
+        inputSize.value = {size: ''}
       }).catch((err)=>{
         console.log(err)
     })
-    }
-  })
-  const engEditHandler = ((index)=>{
-    inputEng.value = rooms.value[index].eng
-    let id = rooms.value[index].id
-    if(!inputEng.value) return 
-    else{
-      axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {eng: inputEng.value})
-        .then((res)=>{
-          rooms.value[index].eng = res.data.eng
-          inputEng.value = {eng: ''}
-        }).catch((err)=>{
-          console.log(err)
-      })
-    }
-  })
-  const sizeEditHandler = ((index)=>{
-    inputSize.value = rooms.value[index].size
-    let id = rooms.value[index].id
-    if(!inputSize.value || inputSize.value < 0 || inputSize.value > 4) return 
-    else{
-      axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {size: inputSize.value})
-        .then((res)=>{
-          rooms.value[index].size = res.data.size
-          inputSize.value = {size: ''}
-        }).catch((err)=>{
-          console.log(err)
-      })
-    }
-  })
-  const priceEditHandler = ((index)=>{
-    inputPrice.value = rooms.value[index].price
-    let id = rooms.value[index].id
-    if(!inputPrice.value || inputPrice.value < 0) return 
-    else{
-      axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {price: inputPrice.value})
-        .then((res)=>{
-          rooms.value[index].price = res.data.price
-          inputPrice.value = {price: ''}
-        }).catch((err)=>{
-          console.log(err)
-      })
-    }
-  })
-  const discountEditHandler = ((index)=>{
-    inputDiscount.value = rooms.value[index].discount
-    let id = rooms.value[index].id
-    if(!inputDiscount.value || inputDiscount.value < 0 || inputDiscount.value > 1) return 
-    else{
-      axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {discount: inputDiscount.value})
-        .then((res)=>{
-          rooms.value[index].discount = res.data.discount
-          inputDiscount.value = {discount: ''}
-        }).catch((err)=>{
-          console.log(err)
-      })
-    }
-  })
-  const coverEditHandler = ((index)=>{
-    inputCover.value = rooms.value[index].cover
-    let id = rooms.value[index].id
-    if(!inputCover.value) return 
-    else{
-      axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {cover: inputCover.value})
-        .then((res)=>{
-          rooms.value[index].cover = res.data.cover
-          inputCover.value = {cover: ''}
-        }).catch((err)=>{
-          console.log(err)
-      })
-    }
-  })
+  }
+})
+const priceEditHandler = ((index)=>{
+  inputPrice.value = rooms.value[index].price
+  let id = rooms.value[index].id
+  if(!inputPrice.value || inputPrice.value < 0) return 
+  else{
+    axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {price: inputPrice.value})
+      .then((res)=>{
+        rooms.value[index].price = res.data.price
+        inputPrice.value = {price: ''}
+      }).catch((err)=>{
+        console.log(err)
+    })
+  }
+})
+const discountEditHandler = ((index)=>{
+  inputDiscount.value = rooms.value[index].discount
+  let id = rooms.value[index].id
+  if(!inputDiscount.value || inputDiscount.value < 0 || inputDiscount.value > 1) return 
+  else{
+    axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {discount: inputDiscount.value})
+      .then((res)=>{
+        rooms.value[index].discount = res.data.discount
+        inputDiscount.value = {discount: ''}
+      }).catch((err)=>{
+        console.log(err)
+    })
+  }
+})
+const coverEditHandler = ((index)=>{
+  inputCover.value = rooms.value[index].cover
+  let id = rooms.value[index].id
+  if(!inputCover.value) return 
+  else{
+    axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {cover: inputCover.value})
+      .then((res)=>{
+        rooms.value[index].cover = res.data.cover
+        inputCover.value = {cover: ''}
+      }).catch((err)=>{
+        console.log(err)
+    })
+  }
+})
 
-  const wifiCheckHandler = ((index)=>{
-    wifiChecked.value = rooms.value[index].equipment.wifi
-    let id = rooms.value[index].id
-    axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {
-      equipment:{
-        wifi: wifiChecked.value,
-        bathtub: rooms.value[index].equipment.bathtub,
-        breakfast: rooms.value[index].equipment.breakfast
-      }
-    })
+const wifiCheckHandler = ((index)=>{
+  wifiChecked.value = rooms.value[index].equipment.wifi
+  let id = rooms.value[index].id
+  axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {
+    equipment:{
+      wifi: wifiChecked.value,
+      bathtub: rooms.value[index].equipment.bathtub,
+      breakfast: rooms.value[index].equipment.breakfast
+    }
   })
-  const bathtubCheckHandler = ((index)=>{
-    bathtubChecked.value = rooms.value[index].equipment.bathtub
-    let id = rooms.value[index].id
-    axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {
-      equipment:{
-        wifi: rooms.value[index].equipment.wifi,
-        bathtub: bathtubChecked.value,
-        breakfast: rooms.value[index].equipment.breakfast
-      }
-    })
+})
+const bathtubCheckHandler = ((index)=>{
+  bathtubChecked.value = rooms.value[index].equipment.bathtub
+  let id = rooms.value[index].id
+  axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {
+    equipment:{
+      wifi: rooms.value[index].equipment.wifi,
+      bathtub: bathtubChecked.value,
+      breakfast: rooms.value[index].equipment.breakfast
+    }
   })
-  const breakfastCheckHandler = ((index)=>{
-    breakfastChecked.value = rooms.value[index].equipment.breakfast
-    let id = rooms.value[index].id
-    axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {
-      equipment:{
-        wifi: rooms.value[index].equipment.wifi,
-        bathtub: rooms.value[index].equipment.bathtub,
-        breakfast: breakfastChecked.value
-      }
-    })
+})
+const breakfastCheckHandler = ((index)=>{
+  breakfastChecked.value = rooms.value[index].equipment.breakfast
+  let id = rooms.value[index].id
+  axios.patch('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms/' + id, {
+    equipment:{
+      wifi: rooms.value[index].equipment.wifi,
+      bathtub: rooms.value[index].equipment.bathtub,
+      breakfast: breakfastChecked.value
+    }
   })
+})
 </script>
 
 <template>
@@ -273,7 +272,7 @@
 </template>
 
 <style scoped lang="scss">
- @import "../assets/style.scss";
+@import "../assets/style.scss";
 .container{
   width: 100%;
 

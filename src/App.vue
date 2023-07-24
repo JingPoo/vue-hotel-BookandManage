@@ -14,7 +14,6 @@ import Navbar from '@/components/Navbar.vue'
 </template>
 
 <style lang="scss">
-
 * {
   padding: 0;
   margin: 0;

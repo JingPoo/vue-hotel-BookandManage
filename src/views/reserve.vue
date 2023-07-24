@@ -7,6 +7,7 @@ const store = useStore()
 const router = useRouter()
 const user = store.state.user
 const reserved = ref([])
+const rooms = ref([])
 onBeforeMount(()=>{
     if(user) {
         reserved.value = JSON.parse(localStorage.getItem(store.state.user['uid'])) || []
@@ -32,6 +33,17 @@ const deleteReserve = () => {
             <h3>您尚未有訂單</h3>
             <p>請至<router-link to="/">飯店首頁</router-link>下訂</p>
         </div>
+        <Teleport to="body">
+            <RoomModal 
+                v-for="(room, index) in rooms" 
+                :key="room.id"
+                v-show="showModal == index"
+                :room="room"
+                :hotelDiscount="discount"
+                :hotelFee="service_fee"
+                @close="closeModalHandler">
+            </RoomModal>
+        </Teleport>
     </div>
     
 </template>

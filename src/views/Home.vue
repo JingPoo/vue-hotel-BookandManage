@@ -1,154 +1,154 @@
 <script setup>
-    import { ref, computed, onMounted, watch } from 'vue';
-    import axios from 'axios';
-    import SearchRoom from '../components/SearchRoom.vue'
-    import RoomModal from '../components/RoomModal.vue'
-    import { useStore } from 'vuex'
+import { ref, computed, onMounted, watch } from 'vue';
+import axios from 'axios';
+import SearchRoom from '../components/SearchRoom.vue'
+import RoomModal from '../components/RoomModal.vue'
+import { useStore } from 'vuex'
 
-    const store = useStore()
-    const today = ref(new Date().toISOString().split('T')[0])
-    const checkin_date = ref(today)
-    const checkout_date = ref(new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0])
-    const discount = ref(0.9) // 飯店折扣
-    const service_fee = ref(200) // 服務費
+const store = useStore()
+const today = ref(new Date().toISOString().split('T')[0])
+const checkin_date = ref(today)
+const checkout_date = ref(new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0])
+const discount = ref(0.9) // 飯店折扣
+const service_fee = ref(200) // 服務費
 
-    const adult = ref(2)
-    const children = ref(0)
-    const roomAmount = ref(1)
-    const adultOptions = ref([1,2,3,4])
-    const childOptions = ref([0,1,2,3,4])
-    const roomOptions = ref([1,2])
-    const rooms = ref([])
-    const totalRooms = ref(0)
-    const nowShow = ref(0)
-    const searchedRooms = ref([])
-    const comfirmRooms = ref([])
-    const totalMoney = ref(0)
-    const nightCount = ref(0)
-    const showModal = ref(-1)
+const adult = ref(2)
+const children = ref(0)
+const roomAmount = ref(1)
+const adultOptions = ref([1,2,3,4])
+const childOptions = ref([0,1,2,3,4])
+const roomOptions = ref([1,2])
+const rooms = ref([])
+const totalRooms = ref(0)
+const nowShow = ref(0)
+const searchedRooms = ref([])
+const comfirmRooms = ref([])
+const totalMoney = ref(0)
+const nightCount = ref(0)
+const showModal = ref(-1)
 
-    onMounted(()=>{
-        axios.get('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms')
-        .then((res)=>{
-            rooms.value = res.data
-            totalRooms.value = res.data.length
-        }).catch((err)=>{
-            console.log(err)
-        })
+onMounted(()=>{
+    axios.get('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms')
+    .then((res)=>{
+        rooms.value = res.data
+        totalRooms.value = res.data.length
+    }).catch((err)=>{
+        console.log(err)
     })
+})
 
-    const checkinHandler = (()=>{
-        let checkoutDate = new Date(checkin_date.value)
-        checkoutDate = checkoutDate.setDate(checkoutDate.getDate() + 1)
-        checkoutDate = new Date(checkoutDate).toISOString().split('T')[0]
-        checkout_date.value = checkoutDate
-    })
-    const checkout_date_min = ((checkin_date)=>{
-        let min = new Date(checkin_date)
-        min = min.setDate(min.getDate() + 1)
-        min = new Date(min).toISOString().split('T')[0]
-        return min
-    })
-    const nightStay = computed(()=>{
-        let difference = new Date(checkout_date.value) - new Date(checkin_date.value)
-        return difference / (1000 * 3600 * 24)
-    })
-    // 看人數決定客房數選項
-    watch([adult, children], ([newAdult, newChildern])=>{
-        let totalPeople = newAdult + newChildern
-        roomOptions.value = Array.from({ length: totalPeople }, (value, index) => index+1)
-    })
-    const searchHandler = (()=>{
-        comfirmRooms.value = []
-        nightCount.value = 0
-        totalMoney.value = 0
+const checkinHandler = (()=>{
+    let checkoutDate = new Date(checkin_date.value)
+    checkoutDate = checkoutDate.setDate(checkoutDate.getDate() + 1)
+    checkoutDate = new Date(checkoutDate).toISOString().split('T')[0]
+    checkout_date.value = checkoutDate
+})
+const checkout_date_min = ((checkin_date)=>{
+    let min = new Date(checkin_date)
+    min = min.setDate(min.getDate() + 1)
+    min = new Date(min).toISOString().split('T')[0]
+    return min
+})
+const nightStay = computed(()=>{
+    let difference = new Date(checkout_date.value) - new Date(checkin_date.value)
+    return difference / (1000 * 3600 * 24)
+})
+// 看人數決定客房數選項
+watch([adult, children], ([newAdult, newChildern])=>{
+    let totalPeople = newAdult + newChildern
+    roomOptions.value = Array.from({ length: totalPeople }, (value, index) => index+1)
+})
+const searchHandler = (()=>{
+    comfirmRooms.value = []
+    nightCount.value = 0
+    totalMoney.value = 0
 
-        let people = adult.value + children.value
-        let room_amount = roomAmount.value
+    let people = adult.value + children.value
+    let room_amount = roomAmount.value
 
-        if(people / room_amount > 4) alert('沒有四人以上房間，請重新選擇')
-        else if(people == room_amount){
-            searchedRooms.value = rooms.value.filter(room => room.size == 1)
-        }
-        else if(room_amount > 1){
-            // 給選擇
-            searchedRooms.value = rooms.value.filter(room => room.size < people)
-        }
-        else searchedRooms.value = rooms.value.filter(room => room.size == people/room_amount)
-    })
+    if(people / room_amount > 4) alert('沒有四人以上房間，請重新選擇')
+    else if(people == room_amount){
+        searchedRooms.value = rooms.value.filter(room => room.size == 1)
+    }
+    else if(room_amount > 1){
+        // 給選擇
+        searchedRooms.value = rooms.value.filter(room => room.size < people)
+    }
+    else searchedRooms.value = rooms.value.filter(room => room.size == people/room_amount)
+})
 
-    const roomClickHandler = ((room)=>{
-        if(store.state.user) {
-            let finalPrice = parseInt(room.price * discount.value * room.discount + service_fee.value)
-            let totalPeople = adult.value + children.value
-            
-            nightCount.value += parseFloat((room.size/totalPeople).toFixed(2))
-            // console.log(nightCount.value, nightStay.value, comfirmRooms.value.length, nightStay.value*roomAmount.value)
-            // 依照所選房型大小計算共可以選房 && 每晚住房數不能超過所選
-            if(nightCount.value > nightStay.value || comfirmRooms.value.length > nightStay.value*roomAmount.value){
-                nightCount.value -= parseFloat((room.size/totalPeople).toFixed(2))
-                return
-            }   
-            // if(comfirmRooms.value.length >= nightStay.value) return
-            comfirmRooms.value.push({
-                name: room.name,
-                size: room.size,
-                final_price: finalPrice
-            })
-            // console.log(nightCount.value)
-            totalMoney.value += parseInt(finalPrice)
-        } else {
-            alert('請先登入會員')
-        }
-        
-    })
-    const deleteRoomHandler = ((index)=>{
+const roomClickHandler = ((room)=>{
+    if(store.state.user) {
+        let finalPrice = parseInt(room.price * discount.value * room.discount + service_fee.value)
         let totalPeople = adult.value + children.value
-        nightCount.value -= parseFloat((comfirmRooms.value[index].size/totalPeople).toFixed(2))
-        totalMoney.value -= comfirmRooms.value[index].final_price
-        comfirmRooms.value.splice(index, 1)
-    })
-    const comfirmHandler = (()=>{
-        alert('訂房已確認! 歡迎您入住')
-        searchedRooms.value = []
-        store.commit('setUserReserve', { 
-            uid: store.state.user['uid'],
-            reserved: comfirmRooms.value
+        
+        nightCount.value += parseFloat((room.size/totalPeople).toFixed(2))
+        // console.log(nightCount.value, nightStay.value, comfirmRooms.value.length, nightStay.value*roomAmount.value)
+        // 依照所選房型大小計算共可以選房 && 每晚住房數不能超過所選
+        if(nightCount.value > nightStay.value || comfirmRooms.value.length > nightStay.value*roomAmount.value){
+            nightCount.value -= parseFloat((room.size/totalPeople).toFixed(2))
+            return
+        }   
+        // if(comfirmRooms.value.length >= nightStay.value) return
+        comfirmRooms.value.push({
+            name: room.name,
+            size: room.size,
+            final_price: finalPrice
         })
-        comfirmRooms.value = []
+        // console.log(nightCount.value)
+        totalMoney.value += parseInt(finalPrice)
+    } else {
+        alert('請先登入會員')
+    }
+    
+})
+const deleteRoomHandler = ((index)=>{
+    let totalPeople = adult.value + children.value
+    nightCount.value -= parseFloat((comfirmRooms.value[index].size/totalPeople).toFixed(2))
+    totalMoney.value -= comfirmRooms.value[index].final_price
+    comfirmRooms.value.splice(index, 1)
+})
+const comfirmHandler = (()=>{
+    alert('訂房已確認! 歡迎您入住')
+    searchedRooms.value = []
+    store.commit('setUserReserve', { 
+        uid: store.state.user['uid'],
+        reserved: comfirmRooms.value
     })
-    const cancelHandler = (()=>{
-        searchedRooms.value = []
-        comfirmRooms.value = []
-    })
+    comfirmRooms.value = []
+})
+const cancelHandler = (()=>{
+    searchedRooms.value = []
+    comfirmRooms.value = []
+})
 
-    let timer = setInterval(function(){
+let timer = setInterval(function(){
+    nextHandler()
+}, 3000)
+const resetTimer = (()=>{
+    clearInterval(timer)
+    timer = setInterval(function(){
         nextHandler()
     }, 3000)
-    const resetTimer = (()=>{
-        clearInterval(timer)
-        timer = setInterval(function(){
-            nextHandler()
-        }, 3000)
-    })
-    const previousHandler = (()=>{
-        nowShow.value = (nowShow.value - 1 + totalRooms.value) % totalRooms.value
-        resetTimer()
-    })
-    const nextHandler = (()=>{
-        nowShow.value = (nowShow.value + 1 + totalRooms.value) % totalRooms.value
-        resetTimer()
-    })
-    const dotHandler = ((index)=>{
-        nowShow.value = index-1
-        resetTimer()
-    })
-    const slideClickHandler = ((index)=>{
-        showModal.value = index
-    })
-    const closeModalHandler = (()=>{
-        showModal.value = -1
-    })
+})
+const previousHandler = (()=>{
+    nowShow.value = (nowShow.value - 1 + totalRooms.value) % totalRooms.value
+    resetTimer()
+})
+const nextHandler = (()=>{
+    nowShow.value = (nowShow.value + 1 + totalRooms.value) % totalRooms.value
+    resetTimer()
+})
+const dotHandler = ((index)=>{
+    nowShow.value = index-1
+    resetTimer()
+})
+const slideClickHandler = ((index)=>{
+    showModal.value = index
+})
+const closeModalHandler = (()=>{
+    showModal.value = -1
+})
 </script>
 <template>
     <div class="container" v-if="rooms.length">
@@ -519,8 +519,8 @@
     }
 }
 .loading {
-  text-align: center;
-  margin-top: 3rem;
+text-align: center;
+margin-top: 3rem;
 }
 
 .comfirmbox-enter-active {
@@ -589,5 +589,4 @@
         transform: scale(.5);
     }
 }
-
 </style>

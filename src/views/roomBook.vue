@@ -1,90 +1,89 @@
 <script setup>
-  import { ref, computed, onMounted } from 'vue'
-  import Room from '../components/Room.vue'
-  import RoomModal from '../components/RoomModal.vue'
-  import axios from 'axios';
+import { ref, computed, onMounted } from 'vue'
+import Room from '../components/Room.vue'
+import RoomModal from '../components/RoomModal.vue'
+import axios from 'axios';
 
-  const rooms = ref([])
-  const discount = ref(0.9) // 飯店折扣
-  const service_fee = ref(200) // 服務費
-  const id = ref(rooms.value.length)
-  const singleFiltered = ref(false)
-  const doubleFiltered = ref(false)
-  const tripleFiltered = ref(false)
-  const quadrupleFiltered = ref(false)
-  const sortBy = ref('unsort')
-  const sortOptions = ref([
-    {text: '不排序', value: 'unsort'},
-    {text: '由低至高', value: 'ascend'},
-    {text: '由高至低', value: 'descend'},
-    {text: '最多折扣', value: 'mostDiscount'}
-  ])
-  const showModal = ref(-1)
+const rooms = ref([])
+const discount = ref(0.9) // 飯店折扣
+const service_fee = ref(200) // 服務費
+const singleFiltered = ref(false)
+const doubleFiltered = ref(false)
+const tripleFiltered = ref(false)
+const quadrupleFiltered = ref(false)
+const sortBy = ref('unsort')
+const sortOptions = ref([
+  {text: '不排序', value: 'unsort'},
+  {text: '由低至高', value: 'ascend'},
+  {text: '由高至低', value: 'descend'},
+  {text: '最多折扣', value: 'mostDiscount'}
+])
+const showModal = ref(-1)
 
-  onMounted(()=>{
-    axios.get('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms')
-      .then((res)=>{
-        rooms.value = res.data
-      }).catch((err)=>{
-        console.log(err)
-      })
-  })
-  
-  const filteredRooms = computed(()=>{
-    return singleFiltered.value ? rooms.value.filter(room => room.size == 1) : 
-            doubleFiltered.value ? rooms.value.filter(room => room.size == 2) :
-            tripleFiltered.value ? rooms.value.filter(room => room.size == 3) :
-            quadrupleFiltered.value ? rooms.value.filter(room => room.size == 4) : 
-            rooms.value
+onMounted(()=>{
+  axios.get('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms')
+    .then((res)=>{
+      rooms.value = res.data
+    }).catch((err)=>{
+      console.log(err)
+    })
+})
 
-  })
+const filteredRooms = computed(()=>{
+  return singleFiltered.value ? rooms.value.filter(room => room.size == 1) : 
+          doubleFiltered.value ? rooms.value.filter(room => room.size == 2) :
+          tripleFiltered.value ? rooms.value.filter(room => room.size == 3) :
+          quadrupleFiltered.value ? rooms.value.filter(room => room.size == 4) : 
+          rooms.value
 
-  const sortedFilteredRooms = computed(()=>{
-    if(sortBy.value == "ascend"){
-      return filteredRooms.value.sort((aRoom, bRoom) => 
-      (aRoom.price * discount.value * aRoom.discount + service_fee.value) - 
-      (bRoom.price* discount.value * bRoom.discount + service_fee.value))
-    }
-    else if(sortBy.value == "descend"){
-      return filteredRooms.value.sort((aRoom, bRoom) => 
-      (bRoom.price * discount.value * bRoom.discount + service_fee.value) - 
-      (aRoom.price* discount.value * aRoom.discount + service_fee.value))
-    }
-    else if(sortBy.value == "mostDiscount"){
-      return filteredRooms.value.sort((aRoom, bRoom) => 
-      (aRoom.discount * discount.value) - (bRoom.discount * discount.value))
-    }
-    else return filteredRooms.value
-  })
+})
 
-  const singleFilter = (()=>{
-    singleFiltered.value = !singleFiltered.value
-    doubleFiltered.value = false
-    tripleFiltered.value = false
-    quadrupleFiltered.value = false
-  })
-  const doubleFilter = (()=>{
-    doubleFiltered.value = !doubleFiltered.value
-    singleFiltered.value = false
-    tripleFiltered.value = false
-    quadrupleFiltered.value = false
-  })
-  const tripleFilter = (()=>{
-    tripleFiltered.value = !tripleFiltered.value
-    singleFiltered.value = false
-    doubleFiltered.value = false
-    quadrupleFiltered.value = false
-  })
-  const quadrupleFilter = (()=>{
-    quadrupleFiltered.value = !quadrupleFiltered.value
-    singleFiltered.value = false
-    tripleFiltered.value = false
-    doubleFiltered.value = false
-  })
+const sortedFilteredRooms = computed(()=>{
+  if(sortBy.value == "ascend"){
+    return filteredRooms.value.sort((aRoom, bRoom) => 
+    (aRoom.price * discount.value * aRoom.discount + service_fee.value) - 
+    (bRoom.price* discount.value * bRoom.discount + service_fee.value))
+  }
+  else if(sortBy.value == "descend"){
+    return filteredRooms.value.sort((aRoom, bRoom) => 
+    (bRoom.price * discount.value * bRoom.discount + service_fee.value) - 
+    (aRoom.price* discount.value * aRoom.discount + service_fee.value))
+  }
+  else if(sortBy.value == "mostDiscount"){
+    return filteredRooms.value.sort((aRoom, bRoom) => 
+    (aRoom.discount * discount.value) - (bRoom.discount * discount.value))
+  }
+  else return filteredRooms.value
+})
 
-  const roomClickHandler = ((index)=>{
-    showModal.value = index
-  })
+const singleFilter = (()=>{
+  singleFiltered.value = !singleFiltered.value
+  doubleFiltered.value = false
+  tripleFiltered.value = false
+  quadrupleFiltered.value = false
+})
+const doubleFilter = (()=>{
+  doubleFiltered.value = !doubleFiltered.value
+  singleFiltered.value = false
+  tripleFiltered.value = false
+  quadrupleFiltered.value = false
+})
+const tripleFilter = (()=>{
+  tripleFiltered.value = !tripleFiltered.value
+  singleFiltered.value = false
+  doubleFiltered.value = false
+  quadrupleFiltered.value = false
+})
+const quadrupleFilter = (()=>{
+  quadrupleFiltered.value = !quadrupleFiltered.value
+  singleFiltered.value = false
+  tripleFiltered.value = false
+  doubleFiltered.value = false
+})
+
+const roomClickHandler = ((index)=>{
+  showModal.value = index
+})
 </script>
 
 <template>

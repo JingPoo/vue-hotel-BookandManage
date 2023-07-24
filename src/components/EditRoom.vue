@@ -1,51 +1,51 @@
 <script setup>
-    import { ref, computed } from 'vue'
+import { ref, computed } from 'vue'
 
-    const props = defineProps({
-        roomData: {
-            type: Object,
-            required: true
-        },
-        hotelDiscount: {
-            type: Number,
-            default: 0.9
-        },
-        hotelFee: {
-            type: Number,
-            default: 200
-        },
-        index: Number
-    })
-    const emit = defineEmits(['editRoom', 'deleteRoom'])
-    
-    const final_discount = computed(()=>{
-        return props.roomData.discount * props.hotelDiscount
-    })
-    const final_discount_show = computed(()=>{
-        let number = final_discount.value * 100
-        if(number % 10 == 0){
-            return parseInt(final_discount.value * 10)
-        }
-        else if(number < 10){
-            return (final_discount.value * 10).toFixed(2)
-        }
-        return parseInt(final_discount.value * 100)
-    })
-    const final_price = computed(()=>{
-        return parseInt(props.roomData.price * final_discount.value + props.hotelFee * 1.0)
-    })
-    const bg_css = computed(()=>{
-        return {
-            backgroundImage: `url(${props.roomData.cover})`
-        }
-    })
-   
-    const editHandler = ()=>{
-        emit('editRoom', props.index)
+const props = defineProps({
+    roomData: {
+        type: Object,
+        required: true
+    },
+    hotelDiscount: {
+        type: Number,
+        default: 0.9
+    },
+    hotelFee: {
+        type: Number,
+        default: 200
+    },
+    index: Number
+})
+const emit = defineEmits(['editRoom', 'deleteRoom'])
+
+const final_discount = computed(()=>{
+    return props.roomData.discount * props.hotelDiscount
+})
+const final_discount_show = computed(()=>{
+    let number = final_discount.value * 100
+    if(number % 10 == 0){
+        return parseInt(final_discount.value * 10)
     }
-    const deleteHandler = ()=>{
-        emit('deleteRoom', props.index)
+    else if(number < 10){
+        return (final_discount.value * 10).toFixed(2)
     }
+    return parseInt(final_discount.value * 100)
+})
+const final_price = computed(()=>{
+    return parseInt(props.roomData.price * final_discount.value + props.hotelFee * 1.0)
+})
+const bg_css = computed(()=>{
+    return {
+        backgroundImage: `url(${props.roomData.cover})`
+    }
+})
+
+const editHandler = ()=>{
+    emit('editRoom', props.index)
+}
+const deleteHandler = ()=>{
+    emit('deleteRoom', props.index)
+}
 </script>
 
 <template>
