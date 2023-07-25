@@ -27,12 +27,18 @@ const totalMoney = ref(0)
 const nightCount = ref(0)
 const showModal = ref(-1)
 const resultNight = ref(1)
+const finishLoad = ref(false)
+const closeCurtain = ref(false)
 
 onMounted(()=>{
     axios.get('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms')
     .then((res)=>{
         rooms.value = res.data
         totalRooms.value = res.data.length
+        finishLoad.value = true
+        setTimeout(()=>{
+            closeCurtain.value = true
+        }, 1500)
     }).catch((err)=>{
         console.log(err)
     })
@@ -160,89 +166,99 @@ const slideClickHandler = ((id)=>{
 })
 </script>
 <template>
-    <div class="container" v-if="rooms.length">
-        <div class="slideshow">
-            <div class="slide" 
-            v-for="(room, index) in rooms" :key="index" :class="[{show: nowShow === index},{showLeft: (nowShow - 1 + totalRooms) % totalRooms === index},{showRight: (nowShow + 1 + totalRooms) % totalRooms === index}]"
-            @click="slideClickHandler(room.id)">
-                <img :src="room.cover">
-                <div class="text"> {{ room.name }} </div>
+    <div>
+        <Teleport to="body">
+            <div class="curtain" :class="{close: closeCurtain}">
+                <div class="curtainTop" :class="{done: finishLoad}">
+                    <h1>Jing Hotel</h1>
+                </div>
+                <div class="curtainBot" :class="{done: finishLoad}"></div>
             </div>
-            <a class="previous" @click="previousHandler"><i class="fa-solid fa-chevron-left"></i></a>
-            <a class="next" @click="nextHandler"><i class="fa-solid fa-chevron-right"></i></a>
-            <div class="dots">
-                <span class="dot" v-for="index in totalRooms" :key="index" @click="dotHandler(index)" :class="{now: nowShow === index-1}"></span>
+        </Teleport>
+        <div class="container" :class="{show: finishLoad}" v-if="rooms.length">
+            <div class="slideshow">
+                <div class="slide" 
+                v-for="(room, index) in rooms" :key="index" :class="[{show: nowShow === index},{showLeft: (nowShow - 1 + totalRooms) % totalRooms === index},{showRight: (nowShow + 1 + totalRooms) % totalRooms === index}]"
+                @click="slideClickHandler(room.id)">
+                    <img :src="room.cover">
+                    <div class="text"> {{ room.name }} </div>
+                </div>
+                <a class="previous" @click="previousHandler"><i class="fa-solid fa-chevron-left"></i></a>
+                <a class="next" @click="nextHandler"><i class="fa-solid fa-chevron-right"></i></a>
+                <div class="dots">
+                    <span class="dot" v-for="index in totalRooms" :key="index" @click="dotHandler(index)" :class="{now: nowShow === index-1}"></span>
+                </div>
+                <Teleport to="body">
+                    <RoomModal 
+                        v-for="room in rooms" 
+                        :key="room.id"
+                        v-show="showModal == room.id"
+                        :room="room"
+                        :hotelDiscount="discount"
+                        :hotelFee="service_fee"
+                        @close="showModal = -1">
+                    </RoomModal>
+                </Teleport>
             </div>
-            <Teleport to="body">
-                <RoomModal 
-                    v-for="room in rooms" 
+            <div class="quickBook">
+                <h1>快速訂房</h1>
+                <div class="book_block">
+                    <div class="date">
+                        <label for="checkin_date">入住日期</label>
+                        <input type="date" id="checkin_date" :min="today" v-model="checkin_date" @input="checkinHandler" required>
+                        <label for="checkout_date">退房日期</label>
+                        <input type="date" id="checkout_date" :min="checkout_date_min(checkin_date)" v-model="checkout_date" required>
+                        <span> ({{ nightStay }}晚) </span>
+                    </div>
+                    <div class="room_detail">
+                        <label for="adult-select">成人</label>  
+                        <select name="adult" id="adult-select" v-model="adult">
+                            <option v-for="index in adultOptions" :key="index" :value="index">{{index}}</option>
+                        </select>
+                        <label for="children-select">小孩</label>  
+                        <select name="children" id="children-select" v-model="children">
+                            <option v-for="index in childOptions" :key="index" :value="index">{{index}}</option>
+                        </select>
+                        <label for="roomAmount-select">客房</label>  
+                        <select name="roomAmount" id="roomAmount-select" v-model="roomAmount">
+                            <option v-for="index in roomOptions" :key="index" :value="index">{{index}}</option>
+                        </select>
+                    </div>
+                    <button id="search-room" @click="searchHandler">搜尋</button>
+                </div>
+            </div>
+            <transition name="comfirmbox">
+                <div class="comfirm bg-info-light-2" v-if="comfirmRooms.length">
+                    <div class="info">
+                        <h3>確認入住資訊:</h3>
+                        <div class="comfirmRoom" v-for="(room, index) in comfirmRooms" :key="index">
+                            <span>{{ room.name }} ${{ room.final_price }} ({{ room.date }})</span>
+                            <!-- <i class="fa-solid fa-trash-can" @click="deleteRoomHandler(index)"></i> -->
+                        </div>
+                        <h4>= ${{ totalMoney }}</h4>
+                    </div>
+                    <div class="button">
+                        <button class="btn-green" @click="comfirmHandler">確認</button>
+                        <button class="btn-red" @click="cancelHandler">取消</button>
+                    </div>
+                </div>
+            </transition>
+            <div class="result" v-if="searchedRooms.length">
+                <h2>請選擇您第 {{ resultNight }} 晚的住宿</h2>
+                <SearchRoom 
+                    v-for="room in searchedRooms" 
                     :key="room.id"
-                    v-show="showModal == room.id"
-                    :room="room"
+                    :roomData="room" 
                     :hotelDiscount="discount"
                     :hotelFee="service_fee"
-                    @close="showModal = -1">
-                </RoomModal>
-            </Teleport>
-        </div>
-        <div class="quickBook">
-            <h1>快速訂房</h1>
-            <div class="book_block">
-                <div class="date">
-                    <label for="checkin_date">入住日期</label>
-                    <input type="date" id="checkin_date" :min="today" v-model="checkin_date" @input="checkinHandler" required>
-                    <label for="checkout_date">退房日期</label>
-                    <input type="date" id="checkout_date" :min="checkout_date_min(checkin_date)" v-model="checkout_date" required>
-                    <span> ({{ nightStay }}晚) </span>
-                </div>
-                <div class="room_detail">
-                    <label for="adult-select">成人</label>  
-                    <select name="adult" id="adult-select" v-model="adult">
-                        <option v-for="index in adultOptions" :key="index" :value="index">{{index}}</option>
-                    </select>
-                    <label for="children-select">小孩</label>  
-                    <select name="children" id="children-select" v-model="children">
-                        <option v-for="index in childOptions" :key="index" :value="index">{{index}}</option>
-                    </select>
-                    <label for="roomAmount-select">客房</label>  
-                    <select name="roomAmount" id="roomAmount-select" v-model="roomAmount">
-                        <option v-for="index in roomOptions" :key="index" :value="index">{{index}}</option>
-                    </select>
-                </div>
-                <button id="search-room" @click="searchHandler">搜尋</button>
+                    @click="roomClickHandler(room)"
+                    >
+                </SearchRoom>
             </div>
         </div>
-        <transition name="comfirmbox">
-            <div class="comfirm bg-info-light-2" v-if="comfirmRooms.length">
-                <div class="info">
-                    <h3>確認入住資訊:</h3>
-                    <div class="comfirmRoom" v-for="(room, index) in comfirmRooms" :key="index">
-                        <span>{{ room.name }} ${{ room.final_price }} ({{ room.date }})</span>
-                        <!-- <i class="fa-solid fa-trash-can" @click="deleteRoomHandler(index)"></i> -->
-                    </div>
-                    <h4>= ${{ totalMoney }}</h4>
-                </div>
-                <div class="button">
-                    <button class="btn-green" @click="comfirmHandler">確認</button>
-                    <button class="btn-red" @click="cancelHandler">取消</button>
-                </div>
-            </div>
-        </transition>
-        <div class="result" v-if="searchedRooms.length">
-            <h2>請選擇您第 {{ resultNight }} 晚的住宿</h2>
-            <SearchRoom 
-                v-for="room in searchedRooms" 
-                :key="room.id"
-                :roomData="room" 
-                :hotelDiscount="discount"
-                :hotelFee="service_fee"
-                @click="roomClickHandler(room)"
-                >
-            </SearchRoom>
+        <div class="loading" v-else>
+            Loading...
         </div>
-    </div>
-    <div class="loading" v-else>
-        Loading...
     </div>
 </template>
 <style scoped lang="scss">
@@ -253,6 +269,45 @@ const slideClickHandler = ((id)=>{
     margin: 0;
     text-decoration: none;
     outline: none;
+}
+.curtain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+
+    &.close {
+        display: none;
+    }
+    .curtainTop,
+    .curtainBot {
+        position: fixed;
+        left: 0;
+        width: 100vw;
+        height: 50vh;
+        background-color: white;
+        transition: all 1.5s;
+    }
+    .curtainTop {
+        top: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+
+        &.done {
+            transform: translateY(-100%);
+        }
+        h1 {
+            color: $primary;
+            padding-bottom: 10px;
+        }
+    }
+    .curtainBot {
+        bottom: 0;
+        &.done {
+            transform: translateY(100%);
+        }
+    }
 }
 .container {
     width: 100%;  
@@ -553,10 +608,9 @@ const slideClickHandler = ((id)=>{
     }
 }
 .loading {
-text-align: center;
-margin-top: 3rem;
+    text-align: center;
+    margin-top: 3rem;
 }
-
 .comfirmbox-enter-active {
     animation: tvin .3s ease;
 }
