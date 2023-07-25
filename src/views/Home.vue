@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
-import axios from 'axios';
+import { ref, computed, onMounted, watch } from 'vue'
+import axios from 'axios'
 import SearchRoom from '../components/SearchRoom.vue'
 import RoomModal from '../components/RoomModal.vue'
 import { useStore } from 'vuex'
@@ -9,8 +9,8 @@ const store = useStore()
 const today = ref(new Date().toISOString().split('T')[0])
 const checkin_date = ref(today)
 const checkout_date = ref(new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0])
-const discount = ref(0.9) // 飯店折扣
-const service_fee = ref(200) // 服務費
+const discount = ref(store.state.discount)
+const service_fee = ref(store.state.serviceFee)
 
 const adult = ref(2)
 const children = ref(0)
@@ -26,6 +26,7 @@ const comfirmRooms = ref([])
 const totalMoney = ref(0)
 const nightCount = ref(0)
 const showModal = ref(-1)
+const resultNight = ref(1)
 
 onMounted(()=>{
     axios.get('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms')
@@ -62,6 +63,7 @@ const searchHandler = (()=>{
     comfirmRooms.value = []
     nightCount.value = 0
     totalMoney.value = 0
+    resultNight.value = 1
 
     let people = adult.value + children.value
     let room_amount = roomAmount.value
@@ -81,22 +83,32 @@ const roomClickHandler = ((room)=>{
     if(store.state.user) {
         let finalPrice = parseInt(room.price * discount.value * room.discount + service_fee.value)
         let totalPeople = adult.value + children.value
-        
-        nightCount.value += parseFloat((room.size/totalPeople).toFixed(2))
-        // console.log(nightCount.value, nightStay.value, comfirmRooms.value.length, nightStay.value*roomAmount.value)
+
+        let nightCountAdd = parseFloat((room.size/totalPeople).toFixed(2))
+        nightCount.value += nightCountAdd
+
+        let nightCountDecimal = nightCount.value.toString().split('.')[1]
+        if(nightCountDecimal && nightCountDecimal[0] == 9) nightCount.value = Math.ceil(nightCount.value)
         // 依照所選房型大小計算共可以選房 && 每晚住房數不能超過所選
         if(nightCount.value > nightStay.value || comfirmRooms.value.length > nightStay.value*roomAmount.value){
-            nightCount.value -= parseFloat((room.size/totalPeople).toFixed(2))
+            nightCount.value -= nightCountAdd
             return
         }   
-        // if(comfirmRooms.value.length >= nightStay.value) return
+        let d = new Date(checkin_date.value)
+        d = d.setDate(d.getDate() + resultNight.value)
+        d = new Date(d).toISOString().split('T')[0]
+        console.log(d)
         comfirmRooms.value.push({
+            id: room.id,
             name: room.name,
-            size: room.size,
+            eng: room.eng,
+            equip: room.equipment,
+            cover: room.cover,
+            date: d,
             final_price: finalPrice
         })
-        // console.log(nightCount.value)
         totalMoney.value += parseInt(finalPrice)
+        if(resultNight.value <= nightCount.value && nightCount.value < nightStay.value) resultNight.value ++
     } else {
         alert('請先登入會員')
     }
@@ -107,19 +119,19 @@ const deleteRoomHandler = ((index)=>{
     nightCount.value -= parseFloat((comfirmRooms.value[index].size/totalPeople).toFixed(2))
     totalMoney.value -= comfirmRooms.value[index].final_price
     comfirmRooms.value.splice(index, 1)
+    if( (resultNight.value - 1)  === Math.ceil(nightCount.value) && resultNight.value > 1) resultNight.value --
 })
 const comfirmHandler = (()=>{
-    alert('訂房已確認! 歡迎您入住')
+    localStorage.setItem(store.state.user['uid'], JSON.stringify(comfirmRooms.value))
     searchedRooms.value = []
-    store.commit('setUserReserve', { 
-        uid: store.state.user['uid'],
-        reserved: comfirmRooms.value
-    })
     comfirmRooms.value = []
+    resultNight.value = 1
+    alert('訂房已確認! 歡迎您入住')
 })
 const cancelHandler = (()=>{
     searchedRooms.value = []
     comfirmRooms.value = []
+    resultNight.value = 1
 })
 
 let timer = setInterval(function(){
@@ -143,11 +155,8 @@ const dotHandler = ((index)=>{
     nowShow.value = index-1
     resetTimer()
 })
-const slideClickHandler = ((index)=>{
-    showModal.value = index
-})
-const closeModalHandler = (()=>{
-    showModal.value = -1
+const slideClickHandler = ((id)=>{
+    showModal.value = id
 })
 </script>
 <template>
@@ -155,7 +164,7 @@ const closeModalHandler = (()=>{
         <div class="slideshow">
             <div class="slide" 
             v-for="(room, index) in rooms" :key="index" :class="[{show: nowShow === index},{showLeft: (nowShow - 1 + totalRooms) % totalRooms === index},{showRight: (nowShow + 1 + totalRooms) % totalRooms === index}]"
-            @click="slideClickHandler(index)">
+            @click="slideClickHandler(room.id)">
                 <img :src="room.cover">
                 <div class="text"> {{ room.name }} </div>
             </div>
@@ -166,13 +175,13 @@ const closeModalHandler = (()=>{
             </div>
             <Teleport to="body">
                 <RoomModal 
-                    v-for="(room, index) in rooms" 
+                    v-for="room in rooms" 
                     :key="room.id"
-                    v-show="showModal == index"
+                    v-show="showModal == room.id"
                     :room="room"
                     :hotelDiscount="discount"
                     :hotelFee="service_fee"
-                    @close="closeModalHandler">
+                    @close="showModal = -1">
                 </RoomModal>
             </Teleport>
         </div>
@@ -205,17 +214,22 @@ const closeModalHandler = (()=>{
         </div>
         <transition name="comfirmbox">
             <div class="comfirm bg-info-light-2" v-if="comfirmRooms.length">
-                <h3>確認入住資訊:</h3>
-                <div class="comfirmRoom" v-for="(room, index) in comfirmRooms" :key="index">
-                    <span>{{ room.name }} ${{ room.final_price }}</span>
-                    <i class="fa-solid fa-trash-can" @click="deleteRoomHandler(index)"></i>
+                <div class="info">
+                    <h3>確認入住資訊:</h3>
+                    <div class="comfirmRoom" v-for="(room, index) in comfirmRooms" :key="index">
+                        <span>{{ room.name }} ${{ room.final_price }} ({{ room.date }})</span>
+                        <!-- <i class="fa-solid fa-trash-can" @click="deleteRoomHandler(index)"></i> -->
+                    </div>
+                    <h4>= ${{ totalMoney }}</h4>
                 </div>
-                <h4>= ${{ totalMoney }}</h4>
-                <button class="btn-green" @click="comfirmHandler">確認</button>
-                <button class="btn-red" @click="cancelHandler">取消</button>
+                <div class="button">
+                    <button class="btn-green" @click="comfirmHandler">確認</button>
+                    <button class="btn-red" @click="cancelHandler">取消</button>
+                </div>
             </div>
         </transition>
-        <div class="result">
+        <div class="result" v-if="searchedRooms.length">
+            <h2>請選擇您第 {{ resultNight }} 晚的住宿</h2>
             <SearchRoom 
                 v-for="room in searchedRooms" 
                 :key="room.id"
@@ -468,21 +482,37 @@ const closeModalHandler = (()=>{
         top: 4rem;
         z-index: 90;
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 20px;
-        padding-bottom: 10px;
+        gap: 10px;
         border-bottom: 2px solid rgb(15, 15, 43);
 
-        h4{
-            font-size: 20px;
-            font-weight: normal;
+        .info {
+            width: 100%;
+            height: max-content;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+
+            h4{
+                font-size: 20px;
+                font-weight: normal;
+            }
         }
-        button{
-            font-size: 1.2rem;
-            font-weight: bold;
+       
+        .button {
+            display: flex;
+            gap: 1rem;
+
+            button{
+                font-size: 1.2rem;
+                font-weight: bold;
+            }
         }
+        
         .comfirmRoom{
             background-color: rgb(206, 234, 237);
             border-radius: 5px;
@@ -515,6 +545,10 @@ const closeModalHandler = (()=>{
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
+        }
+        h2 {
+            grid-column: 1/3;
+            text-align: center;
         }
     }
 }

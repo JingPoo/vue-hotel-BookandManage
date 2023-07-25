@@ -107,6 +107,7 @@ const bg_css = computed(()=>{
             color: white;
             background-color: rgb(225, 83, 83);
             border-radius: 5px;
+            transform: rotate(15deg);
         }
     }
     .info{

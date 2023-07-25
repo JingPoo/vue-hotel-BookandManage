@@ -105,14 +105,23 @@ nav {
       color: white;
       text-decoration: none;
       opacity: .8;
+      font-size: 1.6rem;
+    }
+    a.router-link-active,
+    a:hover {
+      opacity: 1;
+      font-weight: bold;
     }
     h1 {
-      font-size: 2rem;
       width: 10rem;
       height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
+
+      a {
+        font-size: 2rem;
+      }
     }
     .burger {
       width: min-content;
@@ -148,14 +157,6 @@ nav {
         justify-content: center;
         align-items: center;
 
-        a {
-          font-size: 1.6rem;
-        }
-        a.router-link-active,
-        a:hover {
-          opacity: 1;
-          font-weight: bold;
-        }
       }
       .forlogin {
         display: flex;
@@ -211,15 +212,6 @@ nav {
         padding: 1rem 0;
         display: flex;
         align-items: center;
-
-        a {
-          font-size: 1.6rem;
-        }
-        a.router-link-active,
-        a:hover {
-          opacity: 1;
-          font-weight: bold;
-        }
       }
       li + li {
         border-top: 2px solid darken($primary, 10);

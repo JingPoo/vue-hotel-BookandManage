@@ -1,12 +1,14 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
 import Room from '../components/Room.vue'
 import RoomModal from '../components/RoomModal.vue'
-import axios from 'axios';
+import axios from 'axios'
 
+const store = useStore()
 const rooms = ref([])
-const discount = ref(0.9) // 飯店折扣
-const service_fee = ref(200) // 服務費
+const discount = ref(store.state.discount)
+const service_fee = ref(store.state.serviceFee)
 const singleFiltered = ref(false)
 const doubleFiltered = ref(false)
 const tripleFiltered = ref(false)
@@ -81,8 +83,8 @@ const quadrupleFilter = (()=>{
   doubleFiltered.value = false
 })
 
-const roomClickHandler = ((index)=>{
-  showModal.value = index
+const roomClickHandler = ((id)=>{
+  showModal.value = id
 })
 </script>
 
@@ -108,19 +110,19 @@ const roomClickHandler = ((index)=>{
       </div>
       <TransitionGroup appear tag="div" name="jumpin" mode="out-in" class="room_block">
         <Room 
-          v-for="(room, index) in sortedFilteredRooms" 
+          v-for="room in sortedFilteredRooms" 
           :key="room.id"
           :roomData="room" 
           :hotelDiscount="discount"
           :hotelFee="service_fee"
-          @click="roomClickHandler(index)">
+          @click="roomClickHandler(room.id)">
         </Room>
       </TransitionGroup>
       <Teleport to="body">
           <RoomModal 
-            v-for="(room, index) in sortedFilteredRooms" 
+            v-for="room in sortedFilteredRooms" 
             :key="room.id"
-            v-show="showModal == index"
+            v-show="showModal == room.id"
             :room="room"
             :hotelDiscount="discount"
             :hotelFee="service_fee"

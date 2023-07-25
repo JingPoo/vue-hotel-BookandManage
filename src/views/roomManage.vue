@@ -1,8 +1,10 @@
 <script setup>
 import { ref, onMounted, onUpdated} from 'vue'
+import { useStore } from 'vuex'
 import EditRoom from '../components/EditRoom.vue'
 import axios from 'axios'
 
+const store = useStore()
 const rooms = ref([])
 const newRoom = ref({
   name: "新房間",
@@ -29,8 +31,8 @@ const wifiChecked = ref(false)
 const bathtubChecked = ref(false)
 const breakfastChecked = ref(false)
 
-const discount = ref(0.9) // 飯店折扣
-const service_fee = ref(200) // 服務費
+const discount = ref(store.state.discount)
+const service_fee = ref(store.state.serviceFee)
 const edit_id = ref(-1) // 正在編輯的房間index
 
 onMounted(()=>{

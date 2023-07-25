@@ -13,7 +13,8 @@ const store = createStore({
     state: {
         user: null,
         authIsReady: false,
-        // reserve: {},
+        discount: 0.9,
+        serviceFee: 200,
     },
     mutations: {
         setUser(state, payload) {
