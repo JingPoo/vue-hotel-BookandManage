@@ -26,7 +26,6 @@ const final_price = computed(()=>{
     return parseInt(props.roomData.price * final_discount.value + props.hotelFee * 1.0)
 })
 const bg_css = computed(()=>{
-    // const roomCover = new URL(props.roomData.cover, import.meta.url).href;
     return {
         backgroundImage: `url(${props.roomData.cover})`
     }

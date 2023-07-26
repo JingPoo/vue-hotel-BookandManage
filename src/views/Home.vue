@@ -151,18 +151,45 @@ const resetTimer = (()=>{
 })
 const previousHandler = (()=>{
     nowShow.value = (nowShow.value - 1 + totalRooms.value) % totalRooms.value
+    translate.value = 0
     resetTimer()
 })
 const nextHandler = (()=>{
     nowShow.value = (nowShow.value + 1 + totalRooms.value) % totalRooms.value
+    translate.value = 0
     resetTimer()
 })
 const dotHandler = ((index)=>{
     nowShow.value = index-1
     resetTimer()
 })
-const slideClickHandler = ((id)=>{
-    showModal.value = id
+
+const dragging = ref(false)
+const startX = ref(null)
+const translate = ref(0)
+
+const mousedownHandler = (e) => {
+    dragging.value = true
+    startX.value = e.pageX
+}
+const mouseupHandler = () => {
+    dragging.value = false
+    if(translate.value > 0) previousHandler()
+    else if(translate.value < 0) nextHandler()
+}
+const mousemoveHandler = (e) => {
+    if(!dragging.value) return
+    e.preventDefault()
+    translate.value = (e.pageX  - startX.value)
+}
+const dragImg = computed(() => {
+    return {
+        transform: `translateX(${translate.value}px)`
+    }
+})
+onMounted(() => {
+    window.addEventListener('mouseup', mouseupHandler)
+    window.addEventListener('mousemove', mousemoveHandler)
 })
 </script>
 <template>
@@ -176,29 +203,19 @@ const slideClickHandler = ((id)=>{
             </div>
         </Teleport>
         <div class="container" :class="{show: finishLoad}" v-if="rooms.length">
-            <div class="slideshow">
-                <div class="slide" 
-                v-for="(room, index) in rooms" :key="index" :class="[{show: nowShow === index},{showLeft: (nowShow - 1 + totalRooms) % totalRooms === index},{showRight: (nowShow + 1 + totalRooms) % totalRooms === index}]"
-                @click="slideClickHandler(room.id)">
-                    <img :src="room.cover">
-                    <div class="text"> {{ room.name }} </div>
+            <div class="slideshow" @mousedown="mousedownHandler" >
+                <div class="slider" :style="dragImg">
+                    <div class="slide" 
+                    v-for="(room, index) in rooms" :key="index" :class="[{show: nowShow === index},{showLeft: (nowShow - 1 + totalRooms) % totalRooms === index},{showRight: (nowShow + 1 + totalRooms) % totalRooms === index}]">
+                        <img :src="room.cover">
+                        <div class="text"> {{ room.name }} </div>
+                    </div>
                 </div>
                 <a class="previous" @click="previousHandler"><i class="fa-solid fa-chevron-left"></i></a>
                 <a class="next" @click="nextHandler"><i class="fa-solid fa-chevron-right"></i></a>
                 <div class="dots">
                     <span class="dot" v-for="index in totalRooms" :key="index" @click="dotHandler(index)" :class="{now: nowShow === index-1}"></span>
                 </div>
-                <Teleport to="body">
-                    <RoomModal 
-                        v-for="room in rooms" 
-                        :key="room.id"
-                        v-show="showModal == room.id"
-                        :room="room"
-                        :hotelDiscount="discount"
-                        :hotelFee="service_fee"
-                        @close="showModal = -1">
-                    </RoomModal>
-                </Teleport>
             </div>
             <div class="quickBook">
                 <h1>快速訂房</h1>
@@ -321,28 +338,33 @@ const slideClickHandler = ((id)=>{
         width: 95vw;
         height: 25rem;
         position: relative;
+        margin-bottom: 4rem;
 
         @include md {
             width: 40rem;
             height: 28rem;
         }
+        @include lg {
+            width: 48rem;
+            height: 30rem;
+        }
         @include xl {
-            width: 54rem;
-            height: 36rem;
+            width: 58em;
+            height: 34rem;
         }
         a {
             font-size: 3rem;
             color: gray;
             position: absolute;
-            top: 40%;
             cursor: pointer;
             transition: .3s;
+            display: none;
 
             @include md {
-                top:35%
+                top: 40%
             }
             @include xl {
-                top: 40%;
+                top: 45%;
             }
             &:hover{
                 color: $primary;
@@ -375,79 +397,91 @@ const slideClickHandler = ((id)=>{
             }
         }
         .dots {
-            width: 100%;
-            height: 4rem;
+            width: max-content;
+            height: 2.4rem;
             position: absolute;
-            bottom: 0;
+            top: calc(100% + 15px);
+            left: 24%;
             display: flex;
             justify-content: center;
             align-items: center;
+            z-index: 20;
 
+            @include sm {
+                left: 30%;
+            }
+            @include xl {
+                left: 35%;
+            }
             .dot{
                 cursor: pointer;
                 height: 1rem;
                 width: 1rem;
                 margin: 0px 4px;
                 border-radius: 50%;
-                background-color: #bbb;
+                background-color: transparent;
+                border: 1px solid #4e4c4c;
 
-                @include md {
-                    height: 0.8rem;
-                    width: 0.8rem;
-                }
                 &:hover,
                 &.now {
                     background-color: #4e4c4c;
                 }
             }
         }
-        .slide {
+        .slider {
             width: 100%;
-            height: calc(100% - 4rem);
-            position: absolute;
-            top: 0;
-            left: 0;
-            opacity: 0;
-            cursor: pointer;
-            
-            img {
+            height: 100%;
+
+            .slide {
                 width: 100%;
                 height: 100%;
-            }
-            .text {
                 position: absolute;
-                bottom: 1rem;
-                right: 1rem;
-                padding: .5rem 1rem;
-                border-radius: 16px;
-                background-color: rgba(0,0,0,.5);
-                color: white;
-                font-size: 20px;
-            }
-            &.show {
-                opacity: 1;
-                z-index: 10;
-                box-shadow: 0px 0px 10px gray;
-                animation: center 3s linear;
-            }
-            &.showLeft,
-            &.showRight {
-                opacity: .7;
-                position: absolute;
-
+                top: 0;
+                left: 0;
+                opacity: 0;
+                cursor: grab;
+                
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
                 .text {
-                    display: none;
+                    position: absolute;
+                    bottom: 1rem;
+                    right: 1rem;
+                    padding: .5rem 1rem;
+                    border-radius: 16px;
+                    background-color: rgba(0,0,0,.5);
+                    color: white;
+                    font-size: 20px;
+                }
+                &.show {
+                    opacity: 1;
+                    z-index: 10;
+                    box-shadow: 0px 0px 10px gray;
+                    animation: center 3s linear;
+                }
+                &.showLeft,
+                &.showRight {
+                    opacity: .7;
+                    position: absolute;
+
+                    .text {
+                        display: none;
+                    }
+                }
+                &.showLeft {
+                    left: -100%;
+                    animation: left 3s linear;
+                }
+                &.showRight {
+                    left: 100%;
+                    animation: right 3s linear;
                 }
             }
-            &.showLeft {
-                left: -100%;
-                animation: left 3s linear;
-            }
-            &.showRight {
-                left: 100%;
-                animation: right 3s linear;
-            }
+
         }
+        
     }
     .quickBook {
         width: 80%;
