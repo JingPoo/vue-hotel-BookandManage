@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -13,68 +13,82 @@ const clickHandler = () => {
 const user = computed(() => store.state.user)
 const authIsReady = computed(() => store.state.authIsReady)
 const menuShow = ref(false)
+
+const navStick = ref(false)
+onMounted(() => {
+  window.addEventListener('scroll', (e) => {
+    let scrollY = e.currentTarget.scrollY
+    if(scrollY > 60) {
+      navStick.value = true
+    } else navStick.value = false
+  })
+})
 </script>
 
 <template>
-  <nav>
+  <nav :class="{stick: navStick}">
     <div class="nav-container" v-if="authIsReady">
       <h1>
-            <router-link to="/" @click="menuShow = false">Jing Hotel</router-link>
+        <router-link to="/" @click="menuShow = false">Jing Hotel</router-link>
       </h1>
       <div class="burger" @click="menuShow = !menuShow">
-            <i class="fa-solid fa-bars" v-show="!menuShow"></i>
-            <i class="fa-solid fa-x" v-show="menuShow"></i>
+        <i class="fa-solid fa-bars" v-show="!menuShow"></i>
+        <i class="fa-solid fa-x" v-show="menuShow"></i>
       </div>
       <ul class="menu">
         <li>
-            <router-link to="/vue-hotel-BookandManage/roomBook" @click="menuShow = false">房間瀏覽</router-link>
+          <router-link to="/vue-hotel-BookandManage/roomBook" @click="menuShow = false">房間瀏覽</router-link>
         </li>
         <li>
-            <i class="icon fa-solid fa-lock"></i>
-            <router-link to="/vue-hotel-BookandManage/roomManage" @click="menuShow = false">房間管理</router-link>
+          <i class="icon fa-solid fa-lock"></i>
+          <router-link to="/vue-hotel-BookandManage/roomManage" @click="menuShow = false">房間管理</router-link>
         </li>
 
-        <div v-if="user" class="forlogin">
-            <li>
-                <router-link to="/vue-hotel-BookandManage/reserve" @click="menuShow = false">我的訂單</router-link>
-            </li>
-            <span>{{ user.email }}</span>
-            <button class="btn" @click="clickHandler">會員登出</button>
-        </div>
-        <div v-else class="forlogout">
+        <template v-if="user">
           <li>
-                <router-link to="/vue-hotel-BookandManage/login" @click="menuShow = false">登入</router-link>
+            <router-link to="/vue-hotel-BookandManage/reserve" @click="menuShow = false">我的訂單</router-link>
+          </li>
+          <li class="user">
+            <span> {{ user.email }}</span>
+            <button class="btn" @click="clickHandler">登出</button>
+          </li>
+        </template>
+        <template v-else>
+          <li>
+            <router-link to="/vue-hotel-BookandManage/login" @click="menuShow = false">登入</router-link>
           </li>
           <li>
-             <router-link to="/vue-hotel-BookandManage/signup" @click="menuShow = false">註冊會員</router-link>
+            <router-link to="/vue-hotel-BookandManage/signup" @click="menuShow = false">註冊會員</router-link>
           </li>
-        </div>
+        </template>
       </ul>
 
       <ul class="burgerMenu" :class="{show: menuShow}">
         <li>
-            <router-link to="/vue-hotel-BookandManage/roomBook" @click="menuShow = false">房間瀏覽</router-link>
+          <router-link to="/vue-hotel-BookandManage/roomBook" @click="menuShow = false">房間瀏覽</router-link>
         </li>
         <li>
-            <i class="icon fa-solid fa-lock"></i>
-            <router-link to="/vue-hotel-BookandManage/roomManage" @click="menuShow = false">房間管理</router-link>
+          <i class="icon fa-solid fa-lock"></i>
+          <router-link to="/vue-hotel-BookandManage/roomManage" @click="menuShow = false">房間管理</router-link>
         </li>
 
-        <div v-if="user" class="forlogin">
-            <li>
-                <router-link to="/vue-hotel-BookandManage/reserve" @click="menuShow = false">我的訂單</router-link>
-            </li>
+        <template v-if="user">
+          <li>
+            <router-link to="/vue-hotel-BookandManage/reserve" @click="menuShow = false">我的訂單</router-link>
+          </li>
+          <li class="user">
             <span> {{ user.email }}</span>
             <button class="btn" @click="clickHandler">登出</button>
-        </div>
-        <div v-else class="forlogout">
+          </li>
+        </template>
+        <template v-else>
           <li>
-                <router-link to="/vue-hotel-BookandManage/login" @click="menuShow = false">登入</router-link>
+            <router-link to="/vue-hotel-BookandManage/login" @click="menuShow = false">登入</router-link>
           </li>
           <li>
-                <router-link to="/vue-hotel-BookandManage/signup" @click="menuShow = false">註冊會員</router-link>
+            <router-link to="/vue-hotel-BookandManage/signup" @click="menuShow = false">註冊會員</router-link>
           </li>
-        </div>
+        </template>
       </ul>
     </div>
   </nav>
@@ -84,13 +98,28 @@ const menuShow = ref(false)
 nav {
   width: 100vw;
   min-width: max-content;
-  height: 4rem;
+  height: 60px;
   position: sticky;
   top: 0;
   z-index: 99;
   background-color: $primary;
   box-shadow: 0px 0px 5px #3a382c;
 
+  &.stick {
+    background-color: $secondary;
+    border-top: 4px solid $primary;
+    box-shadow: none;
+    
+    .nav-container{
+      a,i,span {
+        color: black;
+      }
+      .burgerMenu {
+        background-color: $secondary;
+        border-color: $primary;
+      }
+    } 
+  }
   .nav-container {
     width: 100%;
     height: 100%;
@@ -121,6 +150,20 @@ nav {
 
       a {
         font-size: 2rem;
+      }
+    }
+    span {
+      color: white;
+      font-size: 1.2rem;
+    }
+    button {
+      height: 2.4rem;
+      font-size: 1.2rem;
+
+      &:hover {
+          font-weight: bold;
+          color: white;
+          background-color: #8b804d;
       }
     }
     .burger {
@@ -156,33 +199,10 @@ nav {
         display: flex;
         justify-content: center;
         align-items: center;
-
       }
-      .forlogin {
+      li.user {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1rem;
-
-        span {
-            color: white;
-            font-size: 1.2rem;
-        }
-        button {
-            height: 2.4rem;
-            font-size: 1.2rem;
-
-            &:hover {
-                font-weight: bold;
-                color: white;
-                background-color: #8b804d;
-            }
-        }
-      }
-      .forlogout {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        gap: 10px;
       }
     }
     .burgerMenu {
@@ -208,43 +228,26 @@ nav {
         transform: translateX(-100%);
       } 
       li {
-        width: max-content;
+        width: 100%;
         padding: 1rem 0;
-        display: flex;
-        align-items: center;
-      }
-      li + li {
-        border-top: 2px solid darken($primary, 10);
-      }
-      .forlogin {
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 1rem;
-        padding: 1rem 0;
-        border-top: 2px solid darken($primary, 10);
-
-        span {
-            color: white;
-            font-size: 1.2rem;
-        }
-        button {
-            height: 2.4rem;
-            font-size: 1.2rem;
-
-            &:hover {
-                font-weight: bold;
-                color: white;
-                background-color: #8b804d;
-            }
-        }
+        position: relative;
       }
-      .forlogout {
+      li + li::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        width: 50%;
+        border-top: 2px solid darken($primary, 10);
+      }
+      li.user {
+        width: 100%;
         display: flex;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
-        border-top: 2px solid darken($primary, 10);
+        gap: 10px;
       }
     }
   }

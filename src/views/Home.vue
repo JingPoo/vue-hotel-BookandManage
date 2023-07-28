@@ -25,7 +25,6 @@ const searchedRooms = ref([])
 const comfirmRooms = ref([])
 const totalMoney = ref(0)
 const nightCount = ref(0)
-const showModal = ref(-1)
 const resultNight = ref(1)
 const finishLoad = ref(false)
 const closeCurtain = ref(false)
@@ -42,6 +41,8 @@ onMounted(()=>{
     }).catch((err)=>{
         console.log(err)
     })
+    window.addEventListener('mouseup', mouseupHandler)
+    window.addEventListener('mousemove', mousemoveHandler)
 })
 
 const checkinHandler = (()=>{
@@ -103,7 +104,6 @@ const roomClickHandler = ((room)=>{
         let d = new Date(checkin_date.value)
         d = d.setDate(d.getDate() + resultNight.value)
         d = new Date(d).toISOString().split('T')[0]
-        console.log(d)
         comfirmRooms.value.push({
             id: room.id,
             name: room.name,
@@ -184,12 +184,8 @@ const mousemoveHandler = (e) => {
 }
 const dragImg = computed(() => {
     return {
-        transform: `translateX(${translate.value}px)`
+        transform: `translateX(${translate.value}px)`,
     }
-})
-onMounted(() => {
-    window.addEventListener('mouseup', mouseupHandler)
-    window.addEventListener('mousemove', mousemoveHandler)
 })
 </script>
 <template>
@@ -245,7 +241,7 @@ onMounted(() => {
                 </div>
             </div>
             <transition name="comfirmbox">
-                <div class="comfirm bg-info-light-2" v-if="comfirmRooms.length">
+                <div class="comfirm" v-if="comfirmRooms.length">
                     <div class="info">
                         <h3>確認入住資訊:</h3>
                         <div class="comfirmRoom" v-for="(room, index) in comfirmRooms" :key="index">
@@ -439,7 +435,6 @@ onMounted(() => {
                 top: 0;
                 left: 0;
                 opacity: 0;
-                cursor: grab;
                 
                 img {
                     width: 100%;
@@ -566,16 +561,18 @@ onMounted(() => {
     .comfirm{
         width: 100vw;
         height: max-content;
+        background-color: $secondary;
         padding: 1rem 2rem;
         position: fixed;
-        top: 4rem;
+        top: 60px;
         z-index: 90;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         gap: 10px;
-        border-bottom: 2px solid rgb(15, 15, 43);
+        border-top: 2px solid $primary;
+        border-bottom: 2px solid $primary;
 
         .info {
             width: 100%;

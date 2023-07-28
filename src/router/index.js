@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useStore } from 'vuex'
 import Home from '/src/views/Home.vue'
 import roomBook from '/src/views/roomBook.vue'
 import roomManage from '/src/views/roomManage.vue'
@@ -7,7 +6,7 @@ import login from '/src/views/login.vue'
 import signup from '/src/views/signup.vue'
 import reserve from '/src/views/reserve.vue'
 import store from '../store/index'
-// const store = useStore()
+
 const routes = [
     {path: '/', redirect: { name: 'Home' }},
     {path: '/vue-hotel-BookandManage/', name: 'Home', component: Home},

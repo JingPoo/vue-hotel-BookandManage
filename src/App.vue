@@ -14,6 +14,8 @@ import Navbar from '@/components/Navbar.vue'
 </template>
 
 <style lang="scss">
+@import "./assets/style.scss";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500;700;900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&display=swap');
 * {
   padding: 0;
   margin: 0;
@@ -24,10 +26,11 @@ html,body {
   height: 100vh; 
 }
 body {
-  background-color: #edecea;
+  background-color: $secondary;
   position: relative;
   overflow-x: hidden;
   overflow-y: scroll;
+  font-family: 'Nunito','Noto Sans TC',  sans-serif;
 }
 .view-container{
   width: 100vw;
