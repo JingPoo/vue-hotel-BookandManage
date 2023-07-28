@@ -2,7 +2,6 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import axios from 'axios'
 import SearchRoom from '../components/SearchRoom.vue'
-import RoomModal from '../components/RoomModal.vue'
 import { useStore } from 'vuex'
 
 const store = useStore()
@@ -24,10 +23,11 @@ const nowShow = ref(0)
 const searchedRooms = ref([])
 const comfirmRooms = ref([])
 const totalMoney = ref(0)
-const nightCount = ref(0)
-const resultNight = ref(1)
+const nightCount = ref(0) // 根據房間容納人數計算到第幾晚
+const resultNight = ref(1) // 訂房區顯示
 const finishLoad = ref(false)
 const closeCurtain = ref(false)
+const scroll = ref(false)
 
 onMounted(()=>{
     axios.get('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms')
@@ -66,11 +66,12 @@ watch([adult, children], ([newAdult, newChildern])=>{
     let totalPeople = newAdult + newChildern
     roomOptions.value = Array.from({ length: totalPeople }, (value, index) => index+1)
 })
-const searchHandler = (()=>{
+const searchHandler = ((e)=>{
     comfirmRooms.value = []
     nightCount.value = 0
     totalMoney.value = 0
     resultNight.value = 1
+    scroll.value = true
 
     let people = adult.value + children.value
     let room_amount = roomAmount.value
@@ -132,12 +133,14 @@ const comfirmHandler = (()=>{
     searchedRooms.value = []
     comfirmRooms.value = []
     resultNight.value = 1
+    scroll.value = false
     alert('訂房已確認! 歡迎您入住')
 })
 const cancelHandler = (()=>{
-    searchedRooms.value = []
     comfirmRooms.value = []
     resultNight.value = 1
+    nightCount.value = 0
+    totalMoney.value = 0
 })
 
 let timer = setInterval(function(){
@@ -239,6 +242,10 @@ const dragImg = computed(() => {
                     </div>
                     <button id="search-room" @click="searchHandler">搜尋</button>
                 </div>
+                <div class="scroll" v-show="scroll===true">
+                    <span>scroll</span>
+                    <i class="fa-solid fa-angles-down fa-bounce"></i>
+                </div>
             </div>
             <transition name="comfirmbox">
                 <div class="comfirm" v-if="comfirmRooms.length">
@@ -334,7 +341,7 @@ const dragImg = computed(() => {
         width: 95vw;
         height: 25rem;
         position: relative;
-        margin-bottom: 4rem;
+        margin-bottom: 2.6rem;
 
         @include md {
             width: 40rem;
@@ -394,7 +401,6 @@ const dragImg = computed(() => {
         }
         .dots {
             width: max-content;
-            height: 2.4rem;
             position: absolute;
             top: calc(100% + 15px);
             left: 24%;
@@ -482,18 +488,25 @@ const dragImg = computed(() => {
         width: 80%;
         height: 22rem;
         background-color: rgba(129, 123, 71, 0.377);
-        backdrop-filter: blur(2px);
         border-radius: 20px;
         padding: 1rem 2rem;
         display: flex;
         flex-direction: column;
         align-items: center;
+        position: relative;
 
         @include md {
             height: 14rem;
         }
         h1{
             height: 3rem;
+        }
+        .scroll {
+            font-size: 1.4rem;
+            position: absolute;
+            z-index: 20;
+            bottom: 10px;
+            right: 10px;
         }
         .book_block {
             width: 100%;
@@ -506,7 +519,6 @@ const dragImg = computed(() => {
             font-size: 1.2rem;
 
             @include md {
-                gap: 1.2rem;
                 font-size: 1.4rem;
             }
             .date {

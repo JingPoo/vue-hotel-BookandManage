@@ -19,19 +19,18 @@ const store = createStore({
     mutations: {
         setUser(state, payload) {
             state.user = payload
-            console.log('user state changed:', state.user)
+            // console.log('user state changed:', state.user)。
         },
         setAuthIsReady(state, payload) {
             state.authIsReady = payload
         },
         setUserReserve(state, {uid, reserved}) {
-            // state.reserve[uid] = reserved
             localStorage.setItem(uid, JSON.stringify(reserved))
         }
     },
     actions: {
         async signup(context, { email, password }) {
-            console.log('signup action')
+            // console.log('signup action')
 
             // async code
             const res = await createUserWithEmailAndPassword(auth, email, password)
@@ -42,7 +41,7 @@ const store = createStore({
             }
         },
         async login(context, { email, password }) {
-            console.log('login action')
+            // console.log('login action')
 
             // async code
             const res = await signInWithEmailAndPassword(auth, email, password)
@@ -53,7 +52,7 @@ const store = createStore({
             }
         },
         async logout(context) {
-            console.log('logout action')
+            // console.log('logout action')
 
             await signOut(auth)
             context.commit('setUser', null)
