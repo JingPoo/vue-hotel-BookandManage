@@ -51,21 +51,25 @@ const checkinHandler = (()=>{
     checkoutDate = new Date(checkoutDate).toISOString().split('T')[0]
     checkout_date.value = checkoutDate
 })
+
 const checkout_date_min = ((checkin_date)=>{
     let min = new Date(checkin_date)
     min = min.setDate(min.getDate() + 1)
     min = new Date(min).toISOString().split('T')[0]
     return min
 })
+
 const nightStay = computed(()=>{
     let difference = new Date(checkout_date.value) - new Date(checkin_date.value)
     return difference / (1000 * 3600 * 24)
 })
+
 // 看人數決定客房數選項
 watch([adult, children], ([newAdult, newChildern])=>{
     let totalPeople = newAdult + newChildern
     roomOptions.value = Array.from({ length: totalPeople }, (value, index) => index+1)
 })
+
 const searchHandler = ((e)=>{
     comfirmRooms.value = []
     nightCount.value = 0
