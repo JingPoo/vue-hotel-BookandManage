@@ -38,15 +38,24 @@ setInterval(function(){
             </div>
         </div>
         <div class="about-text">
-            123
+            <p>Jing Hotel 設立於2023年，以顧客至上為理念，致力打造台灣第一飯店品牌。</p>
+            <p>我們提供多種房型供旅客選擇，另設有私人游泳池、SPA按摩蒸氣室、健身房及各式運動球場供住宿旅客免費使用，希望來到飯店的旅客可以暫時放下煩惱盡情遊玩。</p>
+            <h2>飯店資訊</h2>
+            <p>電話: (02)-12345678</p>
+            <p>傳真: (02)-87654321</p>
+            <p>信箱: jingh861219@gmail.com</p>
+            <p>地址: 100台北市中正區濟南路一段71號</p>
+        </div>
+        <div class="map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.753856227227!2d121.52144034355045!3d25.04242603635274!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a970c3aeb69b%3A0x44ce90483d0f17ec!2z5Y-w5YyX5biC56uL5oiQ5Yqf6auY57Sa5Lit5a24!5e0!3m2!1szh-TW!2stw!4v1690821073441!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </div>
 </template>
 <style scoped lang="scss">
 @import "../assets/style.scss";
 .container {
-    width: 100%;
-
+    width: 100vw;
+    
     .kv {
         width: 100%;
         height: calc(100vh - 60px);
@@ -63,8 +72,21 @@ setInterval(function(){
             transition: all .5s;
 
             &.small {
-                width: 1000px;
-                height: 500px;
+                width: 400px;
+                height: 200px;
+
+                @include md {
+                    width: 500px;
+                    height: 250px;
+                }
+                @include lg {
+                    width: 700px;
+                    height: 350px;
+                }
+                @include xl {
+                    width: 900px;
+                    height: 450px;
+                }
             }
             li {
                 width: 100%;
@@ -102,7 +124,27 @@ setInterval(function(){
     }
     .about-text {
         width: 100%;
-        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 2rem;
+
+        p {
+            font-size: 1.2rem;
+        }
+        h2 {
+            margin-top: 6rem;
+        }
+    }
+    .map {
+        width: 100%;
+        height: 400px;
+        margin-top: 2rem;
+
+        iframe {
+            width: 100%;
+            height: 100%;
+        }
     }
 }
 
