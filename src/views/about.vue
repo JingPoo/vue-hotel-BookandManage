@@ -5,9 +5,9 @@ const total = ref(3)
 const animationDuration = 10
 const active = ref(0)
 const preactive = ref(0)
-const pictures = ref([{id: 1, url: '../src/assets/1.jpg'}, 
-                    {id: 2, url: '../src/assets/2.jpg'}, 
-                    {id: 3, url: '../src/assets/3.jpg'}])              
+const pictures = ref([{id: 1, url: './1.jpg'}, 
+                    {id: 2, url: './2.jpg'}, 
+                    {id: 3, url: './3.jpg'}])              
 
 const img = function(url){
     return{
