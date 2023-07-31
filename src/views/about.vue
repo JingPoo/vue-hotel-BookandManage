@@ -36,6 +36,10 @@ setInterval(function(){
                 <h2>RELAX AND HAVE FUN</h2>
                 <h2>@ Jing Hotel</h2>
             </div>
+            <div class="scrollhint" v-show="!scroll">
+                <span>scroll</span>
+                <i class="fa-solid fa-arrow-down-long fa-bounce"></i>
+            </div>
         </div>
         <div class="about-text">
             <p>Jing Hotel 設立於2023年，以顧客至上為理念，致力打造台灣第一飯店品牌。</p>
@@ -120,6 +124,16 @@ setInterval(function(){
                 font-size: 2rem;
             }
             
+        }
+        .scrollhint {
+            position: absolute;
+            right: 30px;
+            bottom: 10px;
+            font-size: 1.4rem;
+
+            @include md {
+                font-size: 1.8rem;
+            }
         }
     }
     .about-text {
