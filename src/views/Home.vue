@@ -27,7 +27,7 @@ const nightCount = ref(0) // 根據房間容納人數計算到第幾晚
 const resultNight = ref(1) // 訂房區顯示
 const finishLoad = ref(false)
 const closeCurtain = ref(false)
-const scroll = ref(false)
+const scrollhint = ref(false)
 
 onMounted(()=>{
     axios.get('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms')
@@ -75,7 +75,7 @@ const searchHandler = ((e)=>{
     nightCount.value = 0
     totalMoney.value = 0
     resultNight.value = 1
-    scroll.value = true
+    scrollhint.value = true
 
     let people = adult.value + children.value
     let room_amount = roomAmount.value
@@ -137,7 +137,7 @@ const comfirmHandler = (()=>{
     searchedRooms.value = []
     comfirmRooms.value = []
     resultNight.value = 1
-    scroll.value = false
+    scrollhint.value = false
     alert('訂房已確認! 歡迎您入住')
 })
 const cancelHandler = (()=>{
@@ -246,7 +246,7 @@ const dragImg = computed(() => {
                     </div>
                     <button id="search-room" @click="searchHandler">搜尋</button>
                 </div>
-                <div class="scroll" v-show="scroll===true">
+                <div class="scrollhint" v-show="scrollhint===true">
                     <span>scroll</span>
                     <i class="fa-solid fa-angles-down fa-bounce"></i>
                 </div>
@@ -505,7 +505,7 @@ const dragImg = computed(() => {
         h1{
             height: 3rem;
         }
-        .scroll {
+        .scrollhint {
             font-size: 1.4rem;
             position: absolute;
             z-index: 20;

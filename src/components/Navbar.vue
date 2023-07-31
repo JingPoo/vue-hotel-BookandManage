@@ -37,6 +37,9 @@ onMounted(() => {
       </div>
       <ul class="menu">
         <li>
+          <router-link to="/vue-hotel-BookandManage/about" @click="menuShow = false">關於我們</router-link>
+        </li>
+        <li>
           <router-link to="/vue-hotel-BookandManage/roomBook" @click="menuShow = false">房間瀏覽</router-link>
         </li>
         <li>
@@ -64,6 +67,9 @@ onMounted(() => {
       </ul>
 
       <ul class="burgerMenu" :class="{show: menuShow}">
+        <li>
+          <router-link to="/vue-hotel-BookandManage/about" @click="menuShow = false">關於我們</router-link>
+        </li>
         <li>
           <router-link to="/vue-hotel-BookandManage/roomBook" @click="menuShow = false">房間瀏覽</router-link>
         </li>

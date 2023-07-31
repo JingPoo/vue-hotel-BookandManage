@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '/src/views/Home.vue'
+import about from '/src/views/about.vue'
 import roomBook from '/src/views/roomBook.vue'
 import roomManage from '/src/views/roomManage.vue'
 import login from '/src/views/login.vue'
@@ -10,13 +11,14 @@ import store from '../store/index'
 const routes = [
     {path: '/', redirect: { name: 'Home' }},
     {path: '/vue-hotel-BookandManage/', name: 'Home', component: Home},
+    {path: '/vue-hotel-BookandManage/about', name: 'about', component: about},
     {path: '/vue-hotel-BookandManage/roomBook', name: 'roomBook', component: roomBook},
     {
         path: '/vue-hotel-BookandManage/roomManage', 
         name: 'roomManage', 
         component: roomManage,
         beforeEnter(to, from){
-            console.log(store)
+            // console.log(store)
             if(store.state.user) {
                 if(store.state.user['uid'] !== 'VAeCh6Ft0MNyKKhpt0F0Srcf9B42') {
                     alert('您沒有權限瀏覽此頁，請登入管理員帳號')
