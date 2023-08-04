@@ -7,29 +7,27 @@ import RoomModal from '../components/RoomModal.vue'
 
 const store = useStore()
 const router = useRouter()
-const user = store.state.user
 const reserved = ref([])
 const rooms = ref([])
 const showModal = ref(-1)
 const discount = ref(store.state.discount)
 const service_fee = ref(store.state.serviceFee)
+const hasReserve = ref(true)
 
 onMounted(()=>{
   axios.get('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms')
     .then((res)=>{
       rooms.value = res.data
+      hasReserve.value = JSON.parse(localStorage.getItem(store.state.user['uid'])) !== null
+      reserved.value = JSON.parse(localStorage.getItem(store.state.user['uid'])) || []
     }).catch((err)=>{
       console.log(err)
     })
 })
-onBeforeMount(()=>{
-    if(user) {
-        reserved.value = JSON.parse(localStorage.getItem(store.state.user['uid'])) || []
-    }
-})
+
 const deleteReserve = () => {
     if(confirm('確定取消此筆訂單?')) {
-        localStorage.setItem(store.state.user['uid'], JSON.stringify([]))
+        localStorage.removeItem(store.state.user['uid'])
         router.go(0)
     }
 }
@@ -53,11 +51,14 @@ const deleteReserve = () => {
                     <h4>${{ r.final_price }}</h4>
                 </div>
             </div>
-            <!-- <button @click="deleteReserve">取消訂單</button> -->
+            <button @click="deleteReserve">取消訂單</button>
         </div>
-        <div v-else class="noreserve">
+        <div v-else-if="!hasReserve" class="noreserve">
             <h3>您尚未有訂單</h3>
             <p>請至<router-link to="/">飯店首頁</router-link>下訂</p>
+        </div>
+        <div class="loading" v-else>
+            loading...
         </div>
         <Teleport to="body">
             <RoomModal 
@@ -202,7 +203,7 @@ const deleteReserve = () => {
         font-weight: bold;
         border: 3px solid $error;
         border-radius: 5px;
-        background-color: white;
+        background-color: transparent;
         padding: 4px 12px;
         margin-top: 1rem;
         margin: 0 auto;
@@ -244,5 +245,9 @@ const deleteReserve = () => {
             }
         }
     }
+}
+.loading {
+  text-align: center;
+  margin-top: 3rem;
 }
 </style>

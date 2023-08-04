@@ -18,17 +18,17 @@ const routes = [
         name: 'roomManage', 
         component: roomManage,
         beforeEnter(to, from){
-            // console.log(store)
-            if(store.state.user) {
-                if(store.state.user['uid'] !== 'VAeCh6Ft0MNyKKhpt0F0Srcf9B42') {
-                    alert('您沒有權限瀏覽此頁，請登入管理員帳號')
+            if(store.state.authIsReady) {
+                if(store.state.user) {
+                    if(store.state.user['uid'] !== 'VAeCh6Ft0MNyKKhpt0F0Srcf9B42') {
+                        alert('您沒有權限瀏覽此頁，請登入管理員帳號')
+                        return from
+                    }
+                } else {
+                    alert('請先登入管理員帳號!')
                     return from
                 }
-            } else {
-                alert('請先登入管理員帳號!')
-                return from
             }
-            
         },
     },
     {path: '/vue-hotel-BookandManage/login', name: 'login', component: login},
