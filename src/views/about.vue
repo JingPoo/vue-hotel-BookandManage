@@ -91,6 +91,9 @@ setInterval(function(){
                     width: 900px;
                     height: 450px;
                 }
+                @include sm-h {
+                    height: 250px;
+                }
             }
             li {
                 width: 100%;

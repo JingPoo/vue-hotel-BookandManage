@@ -130,4 +130,8 @@ $breakpoints: (
         @content;
     }
 }
-
+@mixin sm-h {
+    @media(max-height: 800px){
+        @content;
+    }
+}
