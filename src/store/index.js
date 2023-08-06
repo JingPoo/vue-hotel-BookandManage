@@ -26,7 +26,13 @@ const store = createStore({
         },
         setUserReserve(state, {uid, reserved}) {
             localStorage.setItem(uid, JSON.stringify(reserved))
-        }
+        },
+        setDiscount(state, payload) {
+            state.discount = payload
+        },
+        setServicefee(state, payload) {
+            state.serviceFee = payload
+        },
     },
     actions: {
         async signup(context, { email, password }) {

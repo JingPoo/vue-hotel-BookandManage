@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue' 
+import { ref, onMounted, onUnmounted } from 'vue' 
 const scroll = ref(false)
 const total = ref(3)
 const animationDuration = 10
@@ -15,11 +15,11 @@ const img = function(url){
         animationDuration: `${animationDuration}s`,
     }
 }
-onMounted(() => {
-    window.addEventListener('scroll', function(){
-        scroll.value = (window.scrollY > 0)
-    })
-})   
+const srollDown = () => {
+    scroll.value = (window.scrollY > 0)
+}
+onMounted(() => window.addEventListener('scroll', srollDown))   
+onUnmounted(() => window.removeEventListener('scroll', srollDown))
 setInterval(function(){
     preactive.value = active.value
     active.value = (active.value + 1 + total.value) % total.value

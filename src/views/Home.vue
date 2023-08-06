@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
 import axios from 'axios'
 import SearchRoom from '../components/SearchRoom.vue'
 import { useStore } from 'vuex'
@@ -44,7 +44,10 @@ onMounted(()=>{
     window.addEventListener('mouseup', mouseupHandler)
     window.addEventListener('mousemove', mousemoveHandler)
 })
-
+onUnmounted(() => {
+    window.removeEventListener('mouseup', mouseupHandler)
+    window.removeEventListener('mousemove', mousemoveHandler)
+})
 const checkinHandler = (()=>{
     let checkoutDate = new Date(checkin_date.value)
     checkoutDate = checkoutDate.setDate(checkoutDate.getDate() + 1)
