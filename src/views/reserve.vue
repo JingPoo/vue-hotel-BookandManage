@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -13,6 +13,11 @@ const showModal = ref(-1)
 const discount = ref(store.state.discount)
 const service_fee = ref(store.state.serviceFee)
 const hasReserve = ref(true)
+const reserveTime = ref()
+const sec = ref()
+const min = ref()
+const hr = ref()
+const day = ref()
 
 onMounted(()=>{
   axios.get('https://my-json-server.typicode.com/JingPoo/vue-hotel-BookandManage/rooms')
@@ -20,6 +25,8 @@ onMounted(()=>{
       rooms.value = res.data
       hasReserve.value = JSON.parse(localStorage.getItem(store.state.user['uid'])) !== null
       reserved.value = JSON.parse(localStorage.getItem(store.state.user['uid'])) || []
+      reserveTime.value = new Date(JSON.parse(localStorage.getItem(store.state.user['uid']))[0].date).setHours(15) || 0
+      countTime()
     }).catch((err)=>{
       console.log(err)
     })
@@ -31,10 +38,31 @@ const deleteReserve = () => {
         router.go(0)
     }
 }
+const countTime = () => {
+    let nowTime = new Date().getTime()
+    let offsetTime = (reserveTime.value - nowTime) / 1000
+    sec.value = parseInt(offsetTime % 60)
+    min.value = parseInt((offsetTime / 60) % 60)
+    hr.value =  parseInt((offsetTime / 60 / 60) % 24)
+    day.value = parseInt((offsetTime / 60 / 60 / 24))
+}
+
+setInterval(function(){
+    countTime()
+}, 1000)
 </script>
 <template>
     <div>
         <div class="container" v-if="reserved.length">
+            <div class="counter">
+                <h1>距離入住還剩下</h1>
+                <div class="clock">
+                    <span>{{ day }}天</span>
+                    <span>{{ hr }}時</span>
+                    <span>{{ min }}分</span>
+                    <span>{{ sec }}秒</span>
+                </div>
+            </div>
             <div v-for="r in reserved" class="room" @click="showModal = r.id">
                 <img :src="r.cover">
                 <div class="info">
@@ -81,8 +109,30 @@ const deleteReserve = () => {
     padding: 2rem;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 2rem;
 
+    .counter {
+        width: 400;
+        height: 150px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 2rem;
+
+        .clock {
+            width: 300px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            span {
+                font-size: 32px;
+            }
+        }
+    }
     .room {
         width: 300px;
         margin: 0 auto;
