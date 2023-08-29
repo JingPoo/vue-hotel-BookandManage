@@ -206,7 +206,7 @@ const roomClickHandler = ((id)=>{
               font-size: 1.2rem;
             }
             &:hover,
-            .filtering {
+            &.filtering {
               color: white;
               background-color: #4e482f;
             }

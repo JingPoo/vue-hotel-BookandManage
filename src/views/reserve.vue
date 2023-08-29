@@ -122,7 +122,7 @@ setInterval(function(){
         margin-top: 2rem;
 
         .clock {
-            width: 300px;
+            width: max-content;
             height: 100px;
             display: flex;
             justify-content: center;
