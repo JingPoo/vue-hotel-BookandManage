@@ -54,7 +54,7 @@ setInterval(function(){
 <template>
     <div>
         <div class="container" v-if="reserved.length">
-            <div class="counter">
+            <div class="counter" v-if="day >= 0">
                 <h1>距離入住還剩下</h1>
                 <div class="clock">
                     <span>{{ day }}天</span>
@@ -62,6 +62,9 @@ setInterval(function(){
                     <span>{{ min }}分</span>
                     <span>{{ sec }}秒</span>
                 </div>
+            </div>
+            <div v-else>
+                <h1>歡迎入住</h1>
             </div>
             <div v-for="r in reserved" class="room" @click="showModal = r.id">
                 <img :src="r.cover">
